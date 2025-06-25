@@ -1,0 +1,13 @@
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/json-2.1.0/ext/json
+/Users/paulbloch/.rbenv/versions/2.7.8/bin/ruby -I /Users/paulbloch/.rbenv/versions/2.7.8/lib/ruby/2.7.0 -r ./siteconf20250624-82590-yg2nuf.rb extconf.rb
+creating Makefile
+
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/json-2.1.0/ext/json
+make "DESTDIR=" clean
+
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/json-2.1.0/ext/json
+make "DESTDIR="
+make: Nothing to be done for `all'.
+
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/json-2.1.0/ext/json
+make "DESTDIR=" install

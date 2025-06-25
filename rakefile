@@ -1,2 +1,44 @@
-require './config/environment'
 require 'sinatra/activerecord/rake'
+
+namespace :db do
+  desc "Create the database"
+  task :create do
+    ActiveRecord::Base.establish_connection(
+      adapter: 'sqlite3',
+      database: 'db/database.db'
+    )
+    puts "Database created"
+  end
+
+  desc "Run migrations"
+  task :migrate do
+    ActiveRecord::Base.establish_connection(
+      adapter: 'sqlite3',
+      database: 'db/database.db'
+    )
+    
+    # Load all migration files
+    Dir.glob("db/migrate/*.rb").sort.each do |migration_file|
+      require migration_file
+      migration_class = File.basename(migration_file, '.rb').split('_')[1..-1].join('_').camelize
+      migration_class.constantize.new.up
+      puts "Migrated: #{migration_file}"
+    end
+  end
+
+  desc "Seed the database"
+  task :seed do
+    # Add some sample data
+    ActiveRecord::Base.establish_connection(
+      adapter: 'sqlite3',
+      database: 'db/database.db'
+    )
+    
+    # Create relationship types
+    RelationshipType.create(name: 'Student') unless RelationshipType.find_by(name: 'Student')
+    RelationshipType.create(name: 'Teacher') unless RelationshipType.find_by(name: 'Teacher')
+    RelationshipType.create(name: 'Successor') unless RelationshipType.find_by(name: 'Successor')
+    
+    puts "Database seeded"
+  end
+end

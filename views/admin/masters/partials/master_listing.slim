@@ -1,24 +1,26 @@
-.row
-  div style="min-width: #{(indent * 30).to_s}px; display: inline;"
-  div
-    h5
-      = master.name
-    button{ 
-      type="button" 
-      class="btn btn-info btn-dark btn-sm"
-      onclick="window.location = '/admin/masters/add/' + '#{master.id}'"} Add Descendant
-    button{ 
-      type="button" 
-      class="btn btn-info btn-dark btn-sm"
-      onclick="window.location = '/admin/masters/edit/' + '#{master.id}'"} Edit Properties
-    button{ 
-      type="button" 
-      class="btn btn-info btn-dark btn-sm"
-      onclick="window.location = '/wiki/edit/' + '#{master.name.gsub(' ','-')}'"} Edit Wiki
-    button{ 
-      type="button"
-      class="btn btn-info btn-dark btn-sm" 
-      onclick="if(confirm('Delete #{master.name}?')) {window.location = '/admin/masters/delete/' + '#{master.id}'}"} Delete
-hr
+/ Master row with shadcn/ui styling
+div class="flex items-center space-x-4 p-4 border-b last:border-b-0 hover:bg-muted/50 transition-colors"
+  / Master info and actions
+  div class="flex-1 flex items-center justify-between"
+    / Master name
+    div class="flex items-center space-x-3"
+      h5 class="text-lg font-medium" = master.name
+      span class="text-sm text-muted-foreground" Master
+    
+    / Action buttons
+    div class="flex items-center space-x-2"
+      / Add Descendant button
+      button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3" onclick="window.location = '/admin/masters/add/' + '#{master.id}'" Add Descendant
+      
+      / Edit Properties button
+      button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3" onclick="window.location = '/admin/masters/edit/' + '#{master.id}'" Edit Properties
+      
+      / Edit Wiki button
+      button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3" onclick="window.location = '/wiki/edit/' + '#{master.name.gsub(/[^\w\-\.]/, '_')}'" Edit Wiki
+      
+      / Delete button
+      button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3" onclick="if(confirm('Are you sure you want to delete this master?')) window.location = '/admin/masters/delete/' + '#{master.id}'" Delete
+
+/ Render child masters recursively
 -master.child_masters.each do |m|
   == render_master_list(m, indent + 1)

@@ -1,0 +1,144 @@
+/ Teachers List Page
+div class="container mx-auto max-w-7xl px-4 py-8"
+  div class="flex items-center justify-between space-y-2 mb-8"
+    div
+      h2 class="text-2xl font-bold tracking-tight" All Teachers
+      p class="text-muted-foreground" Complete list of all masters in the lineage
+    div class="flex items-center space-x-2"
+      a class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2" href="/admin/masters/add" Add Master
+
+/ Search and filter controls
+div class="mb-6"
+  div class="flex items-center space-x-4"
+    div class="flex-1"
+      input type="text" placeholder="Search teachers..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent" id="search-input"
+    div class="flex items-center space-x-2"
+      select class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent" id="sort-select"
+        option value="name" Name
+        option value="name_native" Native Name
+        option value="year_born" Birth Year
+        option value="year_died" Death Year
+        option value="location" Location
+
+/ Teachers table
+div class="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden"
+  table class="w-full"
+    thead class="bg-gray-50"
+      tr
+        th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="name" Name
+        th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="name_native" Native Name
+        th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="years" Years
+        th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" data-sort="location" Location
+        th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" Actions
+    tbody class="bg-white divide-y divide-gray-200" id="teachers-tbody"
+      - @masters.each do |master|
+        tr class="hover:bg-gray-50"
+          td class="px-6 py-4 whitespace-nowrap"
+            div class="flex items-center"
+              div class="text-sm font-medium text-gray-900 cursor-pointer hover:text-red-600" onclick="openWikiDrawer('#{master.name}')"
+                = master.name
+          td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+            = master.name_native
+          td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+            - if master.year_born || master.year_died
+              = "#{master.year_born || '?'} - #{master.year_died || '?'}"
+            - else
+              span class="text-gray-400" Unknown
+          td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+            = master.location || "Unknown"
+          td class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+            div class="flex items-center space-x-2"
+              button class="text-red-600 hover:text-red-900 text-xs px-2 py-1 rounded border border-red-600 hover:bg-red-50" onclick="openWikiDrawer('#{master.name}')" View
+              a class="text-blue-600 hover:text-blue-900 text-xs px-2 py-1 rounded border border-blue-600 hover:bg-blue-50" href="/admin/masters/edit/#{master.id}" Edit Properties
+              a class="text-green-600 hover:text-green-900 text-xs px-2 py-1 rounded border border-green-600 hover:bg-green-50" href="/wiki/edit/#{master.name.gsub(/[^\w\-\.]/, '_')}" Edit Wiki
+
+/ Pagination
+div class="mt-6 flex items-center justify-between"
+  div class="text-sm text-gray-700"
+    span Showing 
+    span class="font-medium" 1
+    span  to 
+    span class="font-medium" = @masters.count
+    span  of 
+    span class="font-medium" = @masters.count
+    span  results
+  div class="flex items-center space-x-2"
+    button class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50" disabled="true" Previous
+    button class="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50" disabled="true" Next
+
+javascript:
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
+    const sortSelect = document.getElementById('sort-select');
+    const tbody = document.getElementById('teachers-tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    
+    // Search functionality
+    searchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      rows.forEach(row => {
+        const name = row.cells[0].textContent.toLowerCase();
+        const nativeName = row.cells[1].textContent.toLowerCase();
+        const location = row.cells[3].textContent.toLowerCase();
+        
+        if (name.includes(searchTerm) || nativeName.includes(searchTerm) || location.includes(searchTerm)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+    
+    // Sort functionality
+    sortSelect.addEventListener('change', function() {
+      const sortBy = this.value;
+      const sortedRows = rows.sort((a, b) => {
+        let aVal, bVal;
+        
+        switch(sortBy) {
+          case 'name':
+            aVal = a.cells[0].textContent;
+            bVal = b.cells[0].textContent;
+            break;
+          case 'name_native':
+            aVal = a.cells[1].textContent;
+            bVal = b.cells[1].textContent;
+            break;
+          case 'years':
+            aVal = a.cells[2].textContent;
+            bVal = b.cells[2].textContent;
+            break;
+          case 'location':
+            aVal = a.cells[3].textContent;
+            bVal = b.cells[3].textContent;
+            break;
+          default:
+            return 0;
+        }
+        
+        return aVal.localeCompare(bVal);
+      });
+      
+      // Re-append sorted rows
+      sortedRows.forEach(row => tbody.appendChild(row));
+    });
+    
+    // Table header sorting
+    document.querySelectorAll('th[data-sort]').forEach(header => {
+      header.addEventListener('click', function() {
+        const sortBy = this.dataset.sort;
+        sortSelect.value = sortBy;
+        sortSelect.dispatchEvent(new Event('change'));
+      });
+    });
+  });
+  
+  function openWikiDrawer(masterName) {
+    if (typeof treeFunctions !== 'undefined' && treeFunctions.openWikiDrawer) {
+      treeFunctions.openWikiDrawer(masterName);
+    } else {
+      // Fallback: open in new tab
+      const sanitizedName = masterName.replace(/[^\w\-\.]/g, '_');
+      window.open("/wiki/view/" + sanitizedName, "_blank");
+    }
+  } 

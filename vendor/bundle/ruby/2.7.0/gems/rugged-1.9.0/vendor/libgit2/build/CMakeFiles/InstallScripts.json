@@ -1,0 +1,14 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-1.9.0/vendor/libgit2/build/cmake_install.cmake",
+		"/Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-1.9.0/vendor/libgit2/build/src/cmake_install.cmake",
+		"/Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-1.9.0/vendor/libgit2/build/deps/llhttp/cmake_install.cmake",
+		"/Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-1.9.0/vendor/libgit2/build/deps/pcre/cmake_install.cmake",
+		"/Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-1.9.0/vendor/libgit2/build/deps/xdiff/cmake_install.cmake",
+		"/Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-1.9.0/vendor/libgit2/build/deps/ntlmclient/cmake_install.cmake",
+		"/Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-1.9.0/vendor/libgit2/build/src/libgit2/cmake_install.cmake",
+		"/Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-1.9.0/vendor/libgit2/build/src/util/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

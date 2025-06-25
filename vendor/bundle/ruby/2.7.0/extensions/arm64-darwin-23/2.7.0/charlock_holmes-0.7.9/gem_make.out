@@ -1,0 +1,56 @@
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/charlock_holmes-0.7.9/ext/charlock_holmes
+/Users/paulbloch/.rbenv/versions/2.7.8/bin/ruby -I /Users/paulbloch/.rbenv/versions/2.7.8/lib/ruby/2.7.0 -r ./siteconf20250624-56742-xip9jw.rb extconf.rb
+checking for -licui18n... yes
+checking for unicode/ucnv.h... yes
+checking for -lz... yes
+checking for -licuuc... yes
+checking for -licudata... yes
+checking for icu that requires explicit C++ version flag... yes
+checking for icu that compiles with c++20 standard... yes
+Static linking is disabled.
+creating Makefile
+
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/charlock_holmes-0.7.9/ext/charlock_holmes
+make "DESTDIR=" clean
+
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/charlock_holmes-0.7.9/ext/charlock_holmes
+make "DESTDIR="
+compiling converter.c
+In file included from converter.c:2:
+In file included from ./common.h:9:
+In file included from /Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby.h:33:
+/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/ruby.h:2738:30: warning: volatile-qualified parameter type 'volatile int' is deprecated [-Wdeprecated-volatile]
+int ruby_cleanup(volatile int);
+                             ^
+1 warning generated.
+compiling encoding_detector.c
+In file included from encoding_detector.c:2:
+In file included from ./common.h:9:
+In file included from /Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby.h:33:
+/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/ruby.h:2738:30: warning: volatile-qualified parameter type 'volatile int' is deprecated [-Wdeprecated-volatile]
+int ruby_cleanup(volatile int);
+                             ^
+1 warning generated.
+compiling ext.c
+In file included from ext.c:1:
+In file included from ./common.h:9:
+In file included from /Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby.h:33:
+/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/ruby.h:2738:30: warning: volatile-qualified parameter type 'volatile int' is deprecated [-Wdeprecated-volatile]
+int ruby_cleanup(volatile int);
+                             ^
+1 warning generated.
+compiling transliterator.cpp
+In file included from transliterator.cpp:1:
+In file included from ./common.h:9:
+In file included from /Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby.h:33:
+/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/ruby.h:2738:30: warning: volatile-qualified parameter type 'volatile int' is deprecated [-Wdeprecated-volatile]
+int ruby_cleanup(volatile int);
+                             ^
+1 warning generated.
+linking shared-object charlock_holmes/charlock_holmes.bundle
+ld: warning: -multiply_defined is obsolete
+ld: warning: ignoring duplicate libraries: '-licui18n', '-licuuc', '-lruby.2.7'
+
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/charlock_holmes-0.7.9/ext/charlock_holmes
+make "DESTDIR=" install
+/opt/homebrew/bin/ginstall -c -m 0755 charlock_holmes.bundle ./.gem.20250624-56742-1drns9t/charlock_holmes

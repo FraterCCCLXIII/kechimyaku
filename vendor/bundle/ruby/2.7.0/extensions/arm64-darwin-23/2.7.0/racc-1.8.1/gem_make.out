@@ -1,0 +1,17 @@
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/racc-1.8.1/ext/racc/cparse
+/Users/paulbloch/.rbenv/versions/2.7.8/bin/ruby -I /Users/paulbloch/.rbenv/versions/2.7.8/lib/ruby/2.7.0 -r ./siteconf20250624-56742-w951i3.rb extconf.rb
+creating Makefile
+
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/racc-1.8.1/ext/racc/cparse
+make "DESTDIR=" clean
+
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/racc-1.8.1/ext/racc/cparse
+make "DESTDIR="
+compiling cparse.c
+linking shared-object racc/cparse.bundle
+ld: warning: -multiply_defined is obsolete
+ld: warning: ignoring duplicate libraries: '-lruby.2.7'
+
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/racc-1.8.1/ext/racc/cparse
+make "DESTDIR=" install
+/opt/homebrew/bin/ginstall -c -m 0755 cparse.bundle ./.gem.20250624-56742-1kxo2ca/racc

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Drawer Test</title>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <style>
+        body {
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f9fafb;
+        }
+        .test-button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .test-button:hover {
+            background: #b91c1c;
+        }
+        .info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h1>Wiki Drawer Test</h1>
+        <p>Click the button below to test the wiki drawer functionality. This will open a right drawer showing wiki content for Bodhidharma.</p>
+    </div>
+    
+    <button class="test-button" onclick="testDrawer()">Test Wiki Drawer</button>
+    
+    <script>
+        // Create right drawer for wiki content
+        function createWikiDrawer() {
+            // Remove existing drawer if any
+            d3.select("#wiki-drawer").remove();
+            
+            // Create drawer container
+            var drawer = d3.select("body").append("div")
+                .attr("id", "wiki-drawer")
+                .style("position", "fixed")
+                .style("top", "0")
+                .style("right", "-400px")
+                .style("width", "400px")
+                .style("height", "100vh")
+                .style("background", "#ffffff")
+                .style("border-left", "1px solid #e5e7eb")
+                .style("box-shadow", "-4px 0 6px -1px rgba(0, 0, 0, 0.1)")
+                .style("z-index", "1000")
+                .style("transition", "right 0.3s ease-in-out")
+                .style("display", "flex")
+                .style("flex-direction", "column");
+
+            // Create header
+            var header = drawer.append("div")
+                .style("padding", "1rem")
+                .style("border-bottom", "1px solid #e5e7eb")
+                .style("display", "flex")
+                .style("justify-content", "space-between")
+                .style("align-items", "center");
+
+            header.append("h3")
+                .attr("id", "drawer-title")
+                .style("margin", "0")
+                .style("font-size", "1.25rem")
+                .style("font-weight", "600")
+                .style("color", "#111827");
+
+            header.append("button")
+                .attr("id", "close-drawer")
+                .style("background", "none")
+                .style("border", "none")
+                .style("font-size", "1.5rem")
+                .style("cursor", "pointer")
+                .style("color", "#6b7280")
+                .style("padding", "0")
+                .style("width", "24px")
+                .style("height", "24px")
+                .style("display", "flex")
+                .style("align-items", "center")
+                .style("justify-content", "center")
+                .text("×")
+                .on("click", closeWikiDrawer);
+
+            // Create content area
+            var content = drawer.append("div")
+                .attr("id", "drawer-content")
+                .style("flex", "1")
+                .style("padding", "1rem")
+                .style("overflow-y", "auto")
+                .style("color", "#374151");
+
+            // Create footer with edit button
+            var footer = drawer.append("div")
+                .style("padding", "1rem")
+                .style("border-top", "1px solid #e5e7eb")
+                .style("background", "#f9fafb");
+
+            footer.append("button")
+                .attr("id", "edit-wiki-btn")
+                .style("width", "100%")
+                .style("padding", "0.75rem 1rem")
+                .style("background", "#dc2626")
+                .style("color", "white")
+                .style("border", "none")
+                .style("border-radius", "0.375rem")
+                .style("font-weight", "500")
+                .style("cursor", "pointer")
+                .style("transition", "background-color 0.2s")
+                .text("Edit Wiki")
+                .on("mouseover", function() {
+                    d3.select(this).style("background", "#b91c1c");
+                })
+                .on("mouseout", function() {
+                    d3.select(this).style("background", "#dc2626");
+                })
+                .on("click", function() {
+                    var masterName = d3.select("#drawer-title").text();
+                    var sanitizedName = masterName.replace(/[^\w\-\.]/g, '_');
+                    window.open("/wiki/edit/" + sanitizedName, "_blank");
+                });
+
+            return drawer;
+        }
+
+        // Function to open wiki drawer
+        function openWikiDrawer(masterName) {
+            var drawer = d3.select("#wiki-drawer");
+            if (drawer.empty()) {
+                drawer = createWikiDrawer();
+            }
+
+            // Update title
+            drawer.select("#drawer-title").text(masterName);
+
+            // Load wiki content
+            var sanitizedName = masterName.replace(/[^\w\-\.]/g, '_');
+            d3.json("/api/wiki/" + sanitizedName, function(error, data) {
+                var content = drawer.select("#drawer-content");
+                if (error || !data || !data.content) {
+                    content.html("<p style='color: #6b7280; font-style: italic;'>No wiki content available for this master. Click 'Edit Wiki' to create content.</p>");
+                } else {
+                    // Simple markdown rendering (basic)
+                    var htmlContent = data.content
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                        .replace(/\n/g, '<br>');
+                    content.html(htmlContent);
+                }
+            });
+
+            // Slide in drawer
+            drawer.style("right", "0");
+        }
+
+        // Function to close wiki drawer
+        function closeWikiDrawer() {
+            var drawer = d3.select("#wiki-drawer");
+            if (!drawer.empty()) {
+                drawer.style("right", "-400px");
+                setTimeout(function() {
+                    drawer.remove();
+                }, 300);
+            }
+        }
+
+        function testDrawer() {
+            openWikiDrawer("Bodhidharma");
+        }
+    </script>
+</body>
+</html> 

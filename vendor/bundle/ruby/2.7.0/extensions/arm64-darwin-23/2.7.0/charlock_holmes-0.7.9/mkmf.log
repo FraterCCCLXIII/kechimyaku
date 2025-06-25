@@ -1,0 +1,352 @@
+"pkg-config --exists icu-i18n"
+| pkg-config --libs icu-i18n
+=> "-L/opt/homebrew/Cellar/icu4c@77/77.1/lib -licui18n\n"
+"clang -o conftest -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/arm64-darwin23 -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/backward -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0 -I. -I/opt/homebrew/opt/icu4c@77/include -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -g -O2 -fno-common -pipe conftest.c  -L. -L/Users/paulbloch/.rbenv/versions/2.7.8/lib -L/opt/homebrew/opt/icu4c@77/lib -L. -fstack-protector-strong -L/usr/local/lib  -m64   -lruby.2.7   "
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return !!argv[argc];
+6: }
+/* end */
+
+"clang -o conftest -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/arm64-darwin23 -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/backward -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0 -I. -I/opt/homebrew/opt/icu4c@77/include -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -g -O2 -fno-common -pipe conftest.c  -L. -L/Users/paulbloch/.rbenv/versions/2.7.8/lib -L/opt/homebrew/opt/icu4c@77/lib -L. -fstack-protector-strong -L/usr/local/lib  -m64   -lruby.2.7 -L/opt/homebrew/Cellar/icu4c@77/77.1/lib -licui18n  "
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return !!argv[argc];
+6: }
+/* end */
+
+| pkg-config --cflags-only-I icu-i18n
+=> "-I/opt/homebrew/Cellar/icu4c@77/77.1/include\n"
+| pkg-config --cflags-only-other icu-i18n
+=> "\n"
+| pkg-config --libs-only-l icu-i18n
+=> "-licui18n\n"
+package configuration for icu-i18n
+incflags: -I/opt/homebrew/Cellar/icu4c@77/77.1/include
+cflags: 
+ldflags: -L/opt/homebrew/Cellar/icu4c@77/77.1/lib
+libs: -licui18n
+
+"pkg-config --exists icu-io"
+| pkg-config --libs icu-io
+=> "-L/opt/homebrew/Cellar/icu4c@77/77.1/lib -licuio\n"
+"clang -o conftest -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/arm64-darwin23 -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/backward -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0 -I. -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/opt/icu4c@77/include -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -g -O2 -fno-common -pipe  conftest.c  -L. -L/Users/paulbloch/.rbenv/versions/2.7.8/lib -L/opt/homebrew/opt/icu4c@77/lib -L. -fstack-protector-strong -L/usr/local/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib  -m64   -licui18n -lruby.2.7 -L/opt/homebrew/Cellar/icu4c@77/77.1/lib -licuio  "
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return !!argv[argc];
+6: }
+/* end */
+
+| pkg-config --cflags-only-I icu-io
+=> "-I/opt/homebrew/Cellar/icu4c@77/77.1/include\n"
+| pkg-config --cflags-only-other icu-io
+=> "\n"
+| pkg-config --libs-only-l icu-io
+=> "-licuio\n"
+package configuration for icu-io
+incflags: -I/opt/homebrew/Cellar/icu4c@77/77.1/include
+cflags: 
+ldflags: -L/opt/homebrew/Cellar/icu4c@77/77.1/lib
+libs: -licuio
+
+"pkg-config --exists icu-uc"
+| pkg-config --libs icu-uc
+=> "-L/opt/homebrew/Cellar/icu4c@77/77.1/lib -licuuc\n"
+"clang -o conftest -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/arm64-darwin23 -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/backward -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0 -I. -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/opt/icu4c@77/include -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -g -O2 -fno-common -pipe   conftest.c  -L. -L/Users/paulbloch/.rbenv/versions/2.7.8/lib -L/opt/homebrew/opt/icu4c@77/lib -L. -fstack-protector-strong -L/usr/local/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib  -m64   -licui18n -licuio -lruby.2.7 -L/opt/homebrew/Cellar/icu4c@77/77.1/lib -licuuc  "
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return !!argv[argc];
+6: }
+/* end */
+
+| pkg-config --cflags-only-I icu-uc
+=> "-I/opt/homebrew/Cellar/icu4c@77/77.1/include\n"
+| pkg-config --cflags-only-other icu-uc
+=> "\n"
+| pkg-config --libs-only-l icu-uc
+=> "-licuuc\n"
+package configuration for icu-uc
+incflags: -I/opt/homebrew/Cellar/icu4c@77/77.1/include
+cflags: 
+ldflags: -L/opt/homebrew/Cellar/icu4c@77/77.1/lib
+libs: -licuuc
+
+have_library: checking for -licui18n... -------------------- yes
+
+"clang -o conftest -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/arm64-darwin23 -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/backward -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0 -I. -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/opt/icu4c@77/include -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -g -O2 -fno-common -pipe    conftest.c  -L. -L/Users/paulbloch/.rbenv/versions/2.7.8/lib -L/opt/homebrew/opt/icu4c@77/lib -L. -fstack-protector-strong -L/usr/local/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib  -m64   -licui18n -licuio -licuuc -lruby.2.7 -licui18n  -licui18n -licuio -licuuc  "
+ld: warning: ignoring duplicate libraries: '-licui18n', '-licuio', '-licuuc'
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     int (* volatile tp)(void)=(int (*)(void))&t;
+ 9:     printf("%d", (*tp)());
+10:   }
+11: 
+12:   return !!argv[argc];
+13: }
+14: 
+15: int t(void) { ; return 0; }
+/* end */
+
+--------------------
+
+have_header: checking for unicode/ucnv.h... -------------------- yes
+
+"clang -E -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/arm64-darwin23 -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/backward -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0 -I. -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/opt/icu4c@77/include -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -g -O2 -fno-common -pipe     conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <unicode/ucnv.h>
+/* end */
+
+--------------------
+
+have_library: checking for -lz... -------------------- yes
+
+"clang -o conftest -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/arm64-darwin23 -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/backward -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0 -I. -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/opt/icu4c@77/include -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -g -O2 -fno-common -pipe    conftest.c  -L. -L/Users/paulbloch/.rbenv/versions/2.7.8/lib -L/opt/homebrew/opt/icu4c@77/lib -L. -fstack-protector-strong -L/usr/local/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib  -m64  -licui18n  -licui18n -licuio -licuuc -lruby.2.7 -lz -licui18n  -licui18n -licuio -licuuc  "
+ld: warning: ignoring duplicate libraries: '-licui18n', '-licuio', '-licuuc'
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     int (* volatile tp)(void)=(int (*)(void))&t;
+ 9:     printf("%d", (*tp)());
+10:   }
+11: 
+12:   return !!argv[argc];
+13: }
+14: 
+15: int t(void) { ; return 0; }
+/* end */
+
+--------------------
+
+have_library: checking for -licuuc... -------------------- yes
+
+"clang -o conftest -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/arm64-darwin23 -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/backward -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0 -I. -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/opt/icu4c@77/include -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -g -O2 -fno-common -pipe    conftest.c  -L. -L/Users/paulbloch/.rbenv/versions/2.7.8/lib -L/opt/homebrew/opt/icu4c@77/lib -L. -fstack-protector-strong -L/usr/local/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib  -m64  -lz -licui18n  -licui18n -licuio -licuuc -lruby.2.7 -licuuc -lz -licui18n  -licui18n -licuio -licuuc  "
+ld: warning: ignoring duplicate libraries: '-licui18n', '-licuio', '-licuuc', '-lz'
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     int (* volatile tp)(void)=(int (*)(void))&t;
+ 9:     printf("%d", (*tp)());
+10:   }
+11: 
+12:   return !!argv[argc];
+13: }
+14: 
+15: int t(void) { ; return 0; }
+/* end */
+
+--------------------
+
+have_library: checking for -licudata... -------------------- yes
+
+"clang -o conftest -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/arm64-darwin23 -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/backward -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0 -I. -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/opt/icu4c@77/include -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -g -O2 -fno-common -pipe    conftest.c  -L. -L/Users/paulbloch/.rbenv/versions/2.7.8/lib -L/opt/homebrew/opt/icu4c@77/lib -L. -fstack-protector-strong -L/usr/local/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib -L/opt/homebrew/Cellar/icu4c@77/77.1/lib  -m64  -licuuc -lz -licui18n  -licui18n -licuio -licuuc -lruby.2.7 -licudata -licuuc -lz -licui18n  -licui18n -licuio -licuuc  "
+ld: warning: ignoring duplicate libraries: '-licui18n', '-licuio', '-licuuc', '-lz'
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     int (* volatile tp)(void)=(int (*)(void))&t;
+ 9:     printf("%d", (*tp)());
+10:   }
+11: 
+12:   return !!argv[argc];
+13: }
+14: 
+15: int t(void) { ; return 0; }
+/* end */
+
+--------------------
+
+checking for icu that requires explicit C++ version flag... -------------------- yes
+
+"clang -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/arm64-darwin23 -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/backward -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0 -I. -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/opt/icu4c@77/include -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -g -O2 -fno-common -pipe    -Wall -funroll-loops -m64 -x c++ -c conftest.c"
+In file included from conftest.c:3:
+In file included from /opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/translit.h:15:
+In file included from /opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/utypes.h:39:
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/uversion.h:182:11: warning: nested namespace definition is a C++17 extension; define each namespace separately [-Wc++17-extensions]
+namespace U_HEADER_ONLY_NAMESPACE {}
+          ^
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/uversion.h:180:48: note: expanded from macro 'U_HEADER_ONLY_NAMESPACE'
+#define U_HEADER_ONLY_NAMESPACE U_ICU_NAMESPACE::U_HEADER_NESTED_NAMESPACE
+                                               ^
+In file included from conftest.c:3:
+In file included from /opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/translit.h:26:
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/uobject.h:134:54: error: expected ';' at end of declaration list
+    static void * U_EXPORT2 operator new(size_t size) noexcept;
+                                                     ^
+                                                     ;
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/uobject.h:141:56: error: expected ';' at end of declaration list
+    static void * U_EXPORT2 operator new[](size_t size) noexcept;
+                                                       ^
+                                                       ;
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/uobject.h:151:51: error: expected ';' at end of declaration list
+    static void U_EXPORT2 operator delete(void *p) noexcept;
+                                                  ^
+                                                  ;
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/uobject.h:158:53: error: expected ';' at end of declaration list
+    static void U_EXPORT2 operator delete[](void *p) noexcept;
+                                                    ^
+                                                    ;
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/uobject.h:166:67: error: expected ';' at end of declaration list
+    static inline void * U_EXPORT2 operator new(size_t, void *ptr) noexcept { return ptr; }
+                                                                  ^
+                                                                  ;
+In file included from conftest.c:3:
+In file included from /opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/translit.h:27:
+In file included from /opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/unistr.h:37:
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:49:30: warning: 'final' keyword is a C++11 extension [-Wc++11-extensions]
+class U_COMMON_API Char16Ptr final {
+                             ^
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:100:19: warning: deleted function definitions are a C++11 extension [-Wc++11-extensions]
+    Char16Ptr() = delete;
+                  ^
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:156:35: warning: 'final' keyword is a C++11 extension [-Wc++11-extensions]
+class U_COMMON_API ConstChar16Ptr final {
+                                  ^
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:208:24: warning: deleted function definitions are a C++11 extension [-Wc++11-extensions]
+    ConstChar16Ptr() = delete;
+                       ^
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:271:38: error: no template named 'enable_if_t' in namespace 'std'
+template<typename T, typename = std::enable_if_t<std::is_same_v<T, UChar>>>
+                                ~~~~~^
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:271:55: error: no template named 'is_same_v' in namespace 'std'; did you mean 'is_same'?
+template<typename T, typename = std::enable_if_t<std::is_same_v<T, UChar>>>
+                                                 ~~~~~^~~~~~~~~
+                                                      is_same
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_same.h:22:29: note: 'is_same' declared here
+struct _LIBCPP_TEMPLATE_VIS is_same : _BoolConstant<__is_same(_Tp, _Up)> {};
+                            ^
+In file included from conftest.c:3:
+In file included from /opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/translit.h:27:
+In file included from /opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/unistr.h:37:
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:271:73: error: a space is required between consecutive right angle brackets (use '> >')
+template<typename T, typename = std::enable_if_t<std::is_same_v<T, UChar>>>
+                                                                        ^~
+                                                                        > > 
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:273:8: error: expected '(' after 'if'
+    if constexpr (std::is_same_v<UChar, char16_t>) {
+       ^
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:385:1: error: unknown type name 'constexpr'
+constexpr bool ConvertibleToU16StringView =
+^
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:385:16: warning: variable templates are a C++14 extension [-Wc++14-extensions]
+constexpr bool ConvertibleToU16StringView =
+               ^
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:386:10: error: no template named 'is_convertible_v' in namespace 'std'; did you mean 'is_convertible'?
+    std::is_convertible_v<T, std::u16string_view>
+    ~~~~~^~~~~~~~~~~~~~~~
+         is_convertible
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_convertible.h:30:29: note: 'is_convertible' declared here
+struct _LIBCPP_TEMPLATE_VIS is_convertible : public integral_constant<bool, __is_convertible(_T1, _T2)> {};
+                            ^
+In file included from conftest.c:3:
+In file included from /opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/translit.h:27:
+In file included from /opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/unistr.h:37:
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:388:5: error: expected '(' for function-style cast or type construction
+    || std::is_convertible_v<T, std::basic_string_view<uint16_t>>
+    ^
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:388:13: error: no template named 'is_convertible_v' in namespace 'std'; did you mean 'is_convertible'?
+    || std::is_convertible_v<T, std::basic_string_view<uint16_t>>
+       ~~~~~^~~~~~~~~~~~~~~~
+            is_convertible
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_convertible.h:30:29: note: 'is_convertible' declared here
+struct _LIBCPP_TEMPLATE_VIS is_convertible : public integral_constant<bool, __is_convertible(_T1, _T2)> {};
+                            ^
+In file included from conftest.c:3:
+In file included from /opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/translit.h:27:
+In file included from /opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/unistr.h:37:
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:388:64: error: a space is required between consecutive right angle brackets (use '> >')
+    || std::is_convertible_v<T, std::basic_string_view<uint16_t>>
+                                                               ^~
+                                                               > >
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:393:5: error: expected '(' for function-style cast or type construction
+    ;
+    ^
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:409:12: warning: generalized initializer lists are a C++11 extension [-Wc++11-extensions]
+    return { ConstChar16Ptr(sv.data()), sv.length() };
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:409:12: error: non-aggregate type 'std::u16string_view' (aka 'basic_string_view<char16_t>') cannot be initialized with an initializer list
+    return { ConstChar16Ptr(sv.data()), sv.length() };
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:429:36: error: no type named 'enable_if_t' in namespace 'std'
+          typename = typename std::enable_if_t<!std::is_pointer_v<std::remove_reference_t<T>>>>
+                     ~~~~~~~~~~~~~~^~~~~~~~~~~
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:429:47: error: expected ',' or '>' in template-parameter-list
+          typename = typename std::enable_if_t<!std::is_pointer_v<std::remove_reference_t<T>>>>
+                                              ^
+/opt/homebrew/Cellar/icu4c@77/77.1/include/unicode/char16ptr.h:429:93: error: expected unqualified-id
+          typename = typename std::enable_if_t<!std::is_pointer_v<std::remove_reference_t<T>>>>
+                                                                                            ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+7 warnings and 20 errors generated.
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <unicode/translit.h>
+4: int main() { return 0; }
+/* end */
+
+--------------------
+
+block in <main>: checking for icu that compiles with c++20 standard... -------------------- yes
+
+"clang -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/arm64-darwin23 -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/backward -I/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0 -I. -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/Cellar/icu4c@77/77.1/include -I/opt/homebrew/opt/icu4c@77/include -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -g -O2 -fno-common -pipe    -Wall -funroll-loops -m64 -x c++ -std=c++20 -c conftest.c"
+In file included from conftest.c:1:
+In file included from /Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby.h:33:
+/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/ruby.h:2738:30: warning: volatile-qualified parameter type 'volatile int' is deprecated [-Wdeprecated-volatile]
+int ruby_cleanup(volatile int);
+                             ^
+1 warning generated.
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <unicode/translit.h>
+4: int main() { return 0; }
+/* end */
+
+--------------------
+

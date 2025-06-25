@@ -1,63 +1,309 @@
-
 doctype html
-
-meta[charset="utf-8"]
-
-link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
-
-script[src="https://code.jquery.com/jquery-3.2.1.slim.min.js"]
-
-script[src="https://unpkg.com/tether@1.4.1/dist/js/tether.js"]
-
-script[src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"]
-
-script[src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"]
-
-script[src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"]
-
-script[src="http://d3js.org/d3.v3.min.js"]
-
-script[src="javascripts/tree.js"]
-
-script[src="javascripts/kechimyaku.js"]
-
-
-css:
-  .node { cursor: pointer; } 
-  .overlay{ background-color:#fff; } 
-  .node circle { fill: #fff; stroke: #ed1c24; stroke-width: 1.5px; } 
-  .nodeText { 
-    font-size:12pt; 
-    font-family:sans-serif;
-  }
-  .nodeTextHighlight { 
-    font-size:12pt; 
-    font-family:sans-serif;
-    font-weight: bold;
-    text-decoration: underline;
-  }  
-  .link { fill: none; stroke: #ed1c24; stroke-width: 1.5px; } 
-  .templink { fill: none; stroke: red; stroke-width: 3px; } 
-  .ghostCircle.show{ display:block; } 
-  .ghostCircle, .activeDrag .ghostCircle{ display: none; }
-  a {color: #ed1c24;}
-  .btn {margin-right: 5px;}
-  .logo {max-width:128px; max-height: 128px;}
-  .nav {margin-bottom: 20px;}
-  .container {margin-left: 22px;}
-  .heading {margin-top: 30px; margin-bottom: 30px;}
-  .navbar-brand {padding-left: 20px; padding-top: 20px;}
-  .popover {max-width: 500px !important;}
-  .typeahead {width: 350px;}
-  input:focus {outline:none !important; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(237,28,36, 0.1) !important; !important; border:1px solid #ed1c24 !important;}
-
-body
-  nav class="navbar navbar-default"
-    a class="navbar-brand" href="/"
-      img class="logo" alt="Kechimyaku" src="/images/kechimyaku_logo.png"
-    div id="search"
-      input class="typeahead form-control" type="text" placeholder="Search Zen Teachers..."
+html lang="en"
+  head
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    title Kechimyaku - Lineage Tree
     
-  
-  .container
-    == yield
+    / Tailwind CSS via CDN
+    script src="https://cdn.tailwindcss.com"
+    
+    / Custom CSS for shadcn/ui components
+    link rel="stylesheet" href="/stylesheets/app.css"
+    
+    / Custom Tailwind configuration
+    script
+      | tailwind.config = {
+      |   darkMode: 'class',
+      |   theme: {
+      |     extend: {
+      |       colors: {
+      |         border: "hsl(var(--border))",
+      |         input: "hsl(var(--input))",
+      |         ring: "hsl(var(--ring))",
+      |         background: "hsl(var(--background))",
+      |         foreground: "hsl(var(--foreground))",
+      |         primary: {
+      |           DEFAULT: "hsl(var(--primary))",
+      |           foreground: "hsl(var(--primary-foreground))",
+      |         },
+      |         secondary: {
+      |           DEFAULT: "hsl(var(--secondary))",
+      |           foreground: "hsl(var(--secondary-foreground))",
+      |         },
+      |         destructive: {
+      |           DEFAULT: "hsl(var(--destructive))",
+      |           foreground: "hsl(var(--destructive-foreground))",
+      |         },
+      |         muted: {
+      |           DEFAULT: "hsl(var(--muted))",
+      |           foreground: "hsl(var(--muted-foreground))",
+      |         },
+      |         accent: {
+      |           DEFAULT: "hsl(var(--accent))",
+      |           foreground: "hsl(var(--accent-foreground))",
+      |         },
+      |         popover: {
+      |           DEFAULT: "hsl(var(--popover))",
+      |           foreground: "hsl(var(--popover-foreground))",
+      |         },
+      |         card: {
+      |           DEFAULT: "hsl(var(--card))",
+      |           foreground: "hsl(var(--card-foreground))",
+      |         },
+      |       },
+      |       borderRadius: {
+      |         lg: "var(--radius)",
+      |         md: "calc(var(--radius) - 2px)",
+      |         sm: "calc(var(--radius) - 4px)",
+      |       },
+      |     },
+      |   },
+      | }
+    
+    / Custom CSS for shadcn/ui variables and tree styling
+    style
+      | :root {
+      |   --background: 0 0% 100%;
+      |   --foreground: 222.2 84% 4.9%;
+      |   --card: 0 0% 100%;
+      |   --card-foreground: 222.2 84% 4.9%;
+      |   --popover: 0 0% 100%;
+      |   --popover-foreground: 222.2 84% 4.9%;
+      |   --primary: 222.2 47.4% 11.2%;
+      |   --primary-foreground: 210 40% 98%;
+      |   --secondary: 210 40% 96%;
+      |   --secondary-foreground: 222.2 84% 4.9%;
+      |   --muted: 210 40% 96%;
+      |   --muted-foreground: 215.4 16.3% 46.9%;
+      |   --accent: 210 40% 96%;
+      |   --accent-foreground: 222.2 84% 4.9%;
+      |   --destructive: 0 84.2% 60.2%;
+      |   --destructive-foreground: 210 40% 98%;
+      |   --border: 214.3 31.8% 91.4%;
+      |   --input: 214.3 31.8% 91.4%;
+      |   --ring: 222.2 84% 4.9%;
+      |   --radius: 0.5rem;
+      | }
+      | 
+      | .dark {
+      |   --background: 222.2 84% 4.9%;
+      |   --foreground: 210 40% 98%;
+      |   --card: 222.2 84% 4.9%;
+      |   --card-foreground: 210 40% 98%;
+      |   --popover: 222.2 84% 4.9%;
+      |   --popover-foreground: 210 40% 98%;
+      |   --primary: 210 40% 98%;
+      |   --primary-foreground: 222.2 47.4% 11.2%;
+      |   --secondary: 217.2 32.6% 17.5%;
+      |   --secondary-foreground: 210 40% 98%;
+      |   --muted: 217.2 32.6% 17.5%;
+      |   --muted-foreground: 215 20.2% 65.1%;
+      |   --accent: 217.2 32.6% 17.5%;
+      |   --accent-foreground: 210 40% 98%;
+      |   --destructive: 0 62.8% 30.6%;
+      |   --destructive-foreground: 210 40% 98%;
+      |   --border: 217.2 32.6% 17.5%;
+      |   --input: 217.2 32.6% 17.5%;
+      |   --ring: 212.7 26.8% 83.9%;
+      | }
+      | 
+      | /* Tree styling */
+      | .node { cursor: pointer; } 
+      | .overlay{ background-color: hsl(var(--background)); } 
+      | .node circle { 
+      |   fill: hsl(var(--background)); 
+      |   stroke: #dc2626; 
+      |   stroke-width: 1.5px; 
+      | } 
+      | .node text { 
+      |   font-size: 12pt; 
+      |   font-family: ui-sans-serif, system-ui, sans-serif;
+      |   fill: hsl(var(--foreground));
+      |   pointer-events: none;
+      |   text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+      | }
+      | .nodeText { 
+      |   font-size: 12pt; 
+      |   font-family: ui-sans-serif, system-ui, sans-serif;
+      |   fill: hsl(var(--foreground));
+      |   pointer-events: none;
+      |   text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+      | }
+      | .nodeTextHighlight { 
+      |   font-size: 12pt; 
+      |   font-family: ui-sans-serif, system-ui, sans-serif;
+      |   font-weight: bold;
+      |   text-decoration: underline;
+      |   fill: hsl(var(--primary));
+      |   pointer-events: none;
+      |   text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+      | }  
+      | .link { 
+      |   fill: none; 
+      |   stroke: #dc2626; 
+      |   stroke-width: 2px; 
+      | } 
+      | .templink { 
+      |   fill: none; 
+      |   stroke: hsl(var(--destructive)); 
+      |   stroke-width: 3px; 
+      | } 
+      | .ghostCircle.show{ display: block; } 
+      | .ghostCircle, .activeDrag .ghostCircle{ display: none; }
+      | 
+      | /* Typeahead styling */
+      | .twitter-typeahead {
+      |   width: 100%;
+      | }
+      | 
+      | .tt-menu {
+      |   width: 100%;
+      |   margin-top: 2px;
+      |   padding: 5px 0;
+      |   background-color: hsl(var(--background));
+      |   border: 1px solid hsl(var(--border));
+      |   border-radius: 0.5rem;
+      |   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      | }
+      | 
+      | .tt-suggestion {
+      |   padding: 8px 12px;
+      |   cursor: pointer;
+      |   color: hsl(var(--foreground));
+      | }
+      | 
+      | .tt-suggestion:hover,
+      | .tt-suggestion.tt-cursor {
+      |   background-color: hsl(var(--accent));
+      |   color: hsl(var(--accent-foreground));
+      | }
+      | 
+      | .tt-highlight {
+      |   font-weight: bold;
+      |   color: hsl(var(--primary));
+      | }
+      | 
+      | /* Zoom slider styles */
+      | #zoom-slider {
+      |   -webkit-appearance: none;
+      |   appearance: none;
+      |   width: 6px;
+      |   height: 120px;
+      |   border-radius: 3px;
+      |   background: #e5e7eb;
+      |   outline: none;
+      |   opacity: 0.7;
+      |   transition: opacity 0.2s;
+      |   cursor: pointer;
+      |   writing-mode: bt-lr;
+      |   -webkit-appearance: slider-vertical;
+      | }
+      | 
+      | #zoom-slider:hover {
+      |   opacity: 1;
+      | }
+      | 
+      | #zoom-slider::-webkit-slider-thumb {
+      |   -webkit-appearance: none;
+      |   appearance: none;
+      |   width: 20px;
+      |   height: 20px;
+      |   border-radius: 50%;
+      |   background: #000000;
+      |   border: 2px solid #ffffff;
+      |   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      |   cursor: pointer;
+      | }
+      | 
+      | #zoom-slider::-moz-range-thumb {
+      |   width: 20px;
+      |   height: 20px;
+      |   border-radius: 50%;
+      |   background: #000000;
+      |   border: 2px solid #ffffff;
+      |   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      |   cursor: pointer;
+      | }
+      | 
+      | /* Zoom controls container */
+      | .zoom-controls {
+      |   position: fixed;
+      |   left: 20px;
+      |   top: 50%;
+      |   transform: translateY(-50%);
+      |   display: flex;
+      |   flex-direction: column;
+      |   align-items: center;
+      |   gap: 10px;
+      |   z-index: 1000;
+      |   background: rgba(255, 255, 255, 0.9);
+      |   padding: 15px;
+      |   border-radius: 10px;
+      |   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      |   backdrop-filter: blur(10px);
+      | }
+      | 
+      | .zoom-button {
+      |   width: 40px;
+      |   height: 40px;
+      |   border-radius: 50%;
+      |   border: none;
+      |   background: #3b82f6;
+      |   color: white;
+      |   cursor: pointer;
+      |   display: flex;
+      |   align-items: center;
+      |   justify-content: center;
+      |   transition: all 0.2s;
+      |   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      | }
+      | 
+      | .zoom-button:hover {
+      |   background: #2563eb;
+      |   transform: scale(1.05);
+      | }
+      | 
+      | .zoom-button:active {
+      |   transform: scale(0.95);
+      | }
+    
+    / External scripts
+    script src="https://code.jquery.com/jquery-3.2.1.min.js"
+    script src="https://unpkg.com/tether@1.4.1/dist/js/tether.js"
+    script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+    script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+    script src="https://d3js.org/d3.v3.min.js"
+    script src="javascripts/tree.js"
+    script src="javascripts/kechimyaku.js"
+    
+    / Lucide icons CDN
+    script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"
+
+  body class="min-h-screen bg-background font-sans antialiased"
+    div class="relative flex min-h-screen flex-col"
+      / Header
+      header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+        div class="container flex h-14 items-center justify-between"
+          / Logo and Navigation
+          div class="flex items-center space-x-6 ml-4"
+            a class="flex items-center space-x-2" href="/"
+              img class="h-8 w-8" alt="Kechimyaku" src="/images/kechimyaku_logo.svg"
+              span class="hidden font-bold sm:inline-block" Kechimyaku
+            
+            nav class="flex items-center space-x-6 text-sm font-medium"
+              a class="transition-colors hover:text-foreground/80 text-foreground/60" href="/" Home
+              a class="transition-colors hover:text-foreground/80 text-foreground/60" href="/about" About
+              a class="transition-colors hover:text-foreground/80 text-foreground/60" href="/admin" Admin
+          
+          / Search bar positioned to the far right
+          div class="relative w-64 mr-4"
+            input class="flex h-9 w-full rounded-md border border-input bg-transparent px-10 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" type="text" placeholder="Search Zen Teachers..." id="search" aria-label="Search Zen Teachers"
+            span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+              svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"
+                circle cx="11" cy="11" r="8"
+                line x1="21" y1="21" x2="16.65" y2="16.65"
+
+      / Main content
+      main class="flex-1"
+        == yield

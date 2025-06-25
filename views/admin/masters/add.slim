@@ -1,33 +1,73 @@
+/ Page header
+div class="container mx-auto py-8 px-4 max-w-4xl space-y-8"
+  div class="flex items-center justify-between"
+    h2 class="text-3xl font-bold tracking-tight" Add New Master
+    p class="text-muted-foreground" Create a new master in the lineage tree
 
-.heading
-  h3 Add New Master
-
-
-form action="/admin/masters/add" method="post"
-
-    .form-group
-      input name="name" type="text" class="form-control" placeholder="Name"
-    .form-group
-      input name="name_native" type="text" class="form-control" placeholder="Native Name"
-    .form-group
-      .row
-        .col-md-4
-          select name="parent_id" type="text" class="form-control"
-            option Select Teacher...
-            - @masters.each do |m|
-              option value="#{m.id}" selected=("selected" if m.id == params[:parent_id].to_i) =m.name
-        .col-md-4
-          select name="relationship_type_id" type="text" class="form-control"
-            option Select Transmission Type...
-            - @relationship_types.each do |rt|
-              option value="#{rt.id}" selected=("selected" if rt.id == 1) =rt.name
-    .form-group
-      input name="year_born" type="text" class="form-control" placeholder="Year of Birth e.g. 1500"
-    .form-group
-      input name="year_died" type="text" class="form-control" placeholder="Year of Death e.g. 1500"
-    .form-group
-      input name="location" type="text" class="form-control" placeholder="Location"
-    .form-group
-      textarea name="overview" class="form-control" placeholder="Overview..." rows="7"
-    .form-group
-      button type="submit" class="btn btn-dark" Add Master
+/ Form container
+div class="space-y-8"
+  form action="/admin/masters/add" method="post" class="space-y-6"
+    / Basic information card
+    div class="rounded-lg border bg-card text-card-foreground shadow-sm"
+      div class="flex flex-col space-y-1.5 p-8"
+        h3 class="text-lg font-semibold leading-none tracking-tight" Basic Information
+      div class="p-8 pt-0 space-y-6"
+        / Name fields
+        div class="grid grid-cols-1 lg:grid-cols-2 gap-6"
+          div class="space-y-3"
+            label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="name" Name
+            input name="name" type="text" class="flex h-10 w-full rounded-md border border-input bg-transparent px-4 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" placeholder="Master's name"
+          
+          div class="space-y-3"
+            label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="name_native" Native Name
+            input name="name_native" type="text" class="flex h-10 w-full rounded-md border border-input bg-transparent px-4 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" placeholder="Native name"
+        
+        / Relationship fields
+        div class="grid grid-cols-1 lg:grid-cols-2 gap-6"
+          div class="space-y-3"
+            label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="parent_id" Teacher
+            select name="parent_id" class="flex h-10 w-full rounded-md border border-input bg-transparent px-4 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              option Select Teacher...
+              - @masters.each do |m|
+                option value="#{m.id}" selected=("selected" if m.id == params[:parent_id].to_i) =m.name
+          
+          div class="space-y-3"
+            label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="relationship_type_id" Transmission Type
+            select name="relationship_type_id" class="flex h-10 w-full rounded-md border border-input bg-transparent px-4 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              option Select Transmission Type...
+              - @relationship_types.each do |rt|
+                option value="#{rt.id}" selected=("selected" if rt.id == 1) =rt.name
+    
+    / Life details card
+    div class="rounded-lg border bg-card text-card-foreground shadow-sm"
+      div class="flex flex-col space-y-1.5 p-8"
+        h3 class="text-lg font-semibold leading-none tracking-tight" Life Details
+      div class="p-8 pt-0 space-y-6"
+        / Years
+        div class="grid grid-cols-1 lg:grid-cols-2 gap-6"
+          div class="space-y-3"
+            label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="year_born" Year of Birth
+            input name="year_born" type="text" class="flex h-10 w-full rounded-md border border-input bg-transparent px-4 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" placeholder="e.g. 1500"
+          
+          div class="space-y-3"
+            label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="year_died" Year of Death
+            input name="year_died" type="text" class="flex h-10 w-full rounded-md border border-input bg-transparent px-4 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" placeholder="e.g. 1500"
+        
+        / Location
+        div class="space-y-3"
+          label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="location" Location
+          input name="location" type="text" class="flex h-10 w-full rounded-md border border-input bg-transparent px-4 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" placeholder="Location"
+    
+    / Overview card
+    div class="rounded-lg border bg-card text-card-foreground shadow-sm"
+      div class="flex flex-col space-y-1.5 p-8"
+        h3 class="text-lg font-semibold leading-none tracking-tight" Overview
+      div class="p-8 pt-0 space-y-6"
+        div class="space-y-3"
+          label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="overview" Biography
+          textarea name="overview" class="flex min-h-[160px] w-full rounded-md border border-input bg-transparent px-4 py-3 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" placeholder="Biography and overview..."
+    
+    / Submit button
+    div class="flex justify-end space-x-4 pt-4"
+      a class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-6 py-2" href="/admin/masters" Cancel
+      button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-6 py-2" Add Master

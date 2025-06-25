@@ -1,0 +1,484 @@
+/* shadcn/ui Component Styles */
+
+/* Button variants */
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2;
+}
+
+.btn-destructive {
+  @apply inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 text-destructive hover:text-destructive;
+}
+
+/* Input styles */
+.input {
+  @apply flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+/* Select styles */
+.select {
+  @apply flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+/* Textarea styles */
+.textarea {
+  @apply flex min-h-[120px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+/* Card styles */
+.card {
+  @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+}
+
+.card-header {
+  @apply flex flex-col space-y-1.5 p-6;
+}
+
+.card-title {
+  @apply text-lg font-semibold leading-none tracking-tight;
+}
+
+.card-description {
+  @apply text-sm text-muted-foreground;
+}
+
+.card-content {
+  @apply p-6 pt-0;
+}
+
+/* Badge styles */
+.badge {
+  @apply inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+}
+
+.badge-default {
+  @apply border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80;
+}
+
+.badge-secondary {
+  @apply border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80;
+}
+
+.badge-destructive {
+  @apply border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80;
+}
+
+.badge-outline {
+  @apply text-foreground;
+}
+
+/* Alert styles */
+.alert {
+  @apply relative w-full rounded-lg border p-4;
+}
+
+.alert-info {
+  @apply bg-background text-foreground;
+}
+
+.alert-success {
+  @apply border-green-200 bg-green-50 text-green-800;
+}
+
+.alert-warning {
+  @apply border-yellow-200 bg-yellow-50 text-yellow-800;
+}
+
+.alert-destructive {
+  @apply border-destructive/50 text-destructive dark:border-destructive;
+}
+
+/* Loading spinner */
+.spinner {
+  @apply animate-spin rounded-full border-2 border-gray-300 border-t-primary h-4 w-4;
+}
+
+/* Tree specific improvements */
+.tree-container {
+  @apply bg-background border rounded-lg p-4;
+  width: 100%;
+  height: 100%;
+}
+
+#tree-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+#tree-container svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.tree-node {
+  @apply transition-all duration-200 ease-in-out;
+}
+
+.tree-node:hover {
+  @apply bg-muted/50;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .container {
+    @apply px-4;
+  }
+  
+  .card-content {
+    @apply p-4 pt-0;
+  }
+  
+  .btn {
+    @apply text-xs px-3 py-1;
+  }
+}
+
+/* Dark mode improvements */
+.dark .tree-container {
+  @apply bg-card border-border;
+}
+
+/* Focus states for accessibility */
+.focus-visible {
+  @apply outline-none ring-2 ring-ring ring-offset-2;
+}
+
+/* Animation utilities */
+.fade-in {
+  @apply animate-in fade-in duration-300;
+}
+
+.slide-in {
+  @apply animate-in slide-in-from-bottom-4 duration-300;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted)) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--muted));
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--muted-foreground));
+}
+
+/* Tree styling */
+.node { cursor: pointer; } 
+.overlay{ background-color: hsl(var(--background)); } 
+.node circle { 
+  fill: hsl(var(--background)); 
+  stroke: #dc2626; 
+  stroke-width: 1.5px; 
+} 
+.node text { 
+  font-size: 12pt; 
+  font-family: ui-sans-serif, system-ui, sans-serif; 
+  fill: hsl(var(--foreground)); 
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  user-select: none;
+}
+
+/* Ensure text elements are always clickable */
+.node text:hover {
+  fill: #dc2626 !important;
+  text-decoration: underline;
+}
+
+/* Make sure SVG groups don't block pointer events */
+.node {
+  pointer-events: auto;
+}
+
+/* Ensure the entire SVG allows pointer events */
+#tree-container svg {
+  pointer-events: auto;
+}
+
+/* Make sure no overlays block clicks */
+.overlay {
+  pointer-events: none;
+}
+
+.nodeText { 
+  font-size: 12pt; 
+  font-family: ui-sans-serif, system-ui, sans-serif; 
+  fill: hsl(var(--foreground)); 
+  pointer-events: none; 
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+.nodeTextHighlight { 
+  font-size: 12pt; 
+  font-family: ui-sans-serif, system-ui, sans-serif; 
+  font-weight: bold; 
+  text-decoration: underline; 
+  fill: hsl(var(--primary)); 
+  pointer-events: none; 
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}  
+.link { 
+  fill: none; 
+  stroke: #dc2626; 
+  stroke-width: 2px; 
+} 
+.templink { 
+  fill: none; 
+  stroke: hsl(var(--destructive)); 
+  stroke-width: 3px; 
+} 
+.ghostCircle.show{ display: block; } 
+.ghostCircle, .activeDrag .ghostCircle{ display: none; }
+
+/* Wiki Drawer Styles */
+#wiki-drawer {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  box-shadow: -4px 0 6px -1px rgba(0, 0, 0, 0.1), -2px 0 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+#wiki-drawer h3 {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  color: #111827;
+}
+
+#wiki-drawer #drawer-content {
+  line-height: 1.6;
+  color: #374151;
+}
+
+#wiki-drawer #drawer-content h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 1rem 0 0.5rem 0;
+  color: #111827;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.25rem;
+}
+
+#wiki-drawer #drawer-content h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem 0;
+  color: #111827;
+}
+
+#wiki-drawer #drawer-content h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0.75rem 0 0.25rem 0;
+  color: #111827;
+}
+
+#wiki-drawer #drawer-content p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+#wiki-drawer #drawer-content ul, 
+#wiki-drawer #drawer-content ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+#wiki-drawer #drawer-content li {
+  margin: 0.25rem 0;
+  line-height: 1.5;
+}
+
+#wiki-drawer #drawer-content strong {
+  font-weight: 600;
+  color: #111827;
+}
+
+#wiki-drawer #drawer-content em {
+  font-style: italic;
+}
+
+#wiki-drawer #drawer-content code {
+  background-color: #f3f4f6;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+  color: #dc2626;
+}
+
+#wiki-drawer #drawer-content pre {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  margin: 0.75rem 0;
+  overflow-x: auto;
+}
+
+#wiki-drawer #drawer-content pre code {
+  background: none;
+  padding: 0;
+  color: #374151;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+#wiki-drawer #drawer-content a {
+  color: #dc2626;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+#wiki-drawer #drawer-content a:hover {
+  border-bottom-color: #dc2626;
+}
+
+#wiki-drawer #drawer-content blockquote {
+  border-left: 4px solid #dc2626;
+  margin: 0.75rem 0;
+  padding-left: 1rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Ensure proper spacing for the first and last elements */
+#wiki-drawer #drawer-content > *:first-child {
+  margin-top: 0;
+}
+
+#wiki-drawer #drawer-content > *:last-child {
+  margin-bottom: 0;
+}
+
+#wiki-drawer #edit-wiki-btn:hover {
+  background-color: #b91c1c !important;
+}
+
+#wiki-drawer #close-drawer:hover {
+  color: #374151 !important;
+  background-color: #f3f4f6;
+  border-radius: 4px;
+}
+
+/* Typeahead styling */
+.twitter-typeahead { 
+  width: 100%;
+}
+.tt-menu { 
+  width: 100%; 
+  margin-top: 2px; 
+  padding: 5px 0; 
+  background-color: hsl(var(--background)); 
+  border: 1px solid hsl(var(--border)); 
+  border-radius: 0.5rem; 
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.tt-suggestion { 
+  padding: 8px 12px; 
+  cursor: pointer; 
+  color: hsl(var(--foreground));
+}
+.tt-suggestion:hover,
+.tt-suggestion.tt-cursor { 
+  background-color: hsl(var(--accent)); 
+  color: hsl(var(--accent-foreground));
+}
+.tt-highlight { 
+  font-weight: bold; 
+  color: hsl(var(--primary));
+}
+
+/* Zoom slider styles */
+#zoom-slider { 
+  -webkit-appearance: none; 
+  appearance: none; 
+  width: 6px; 
+  height: 120px; 
+  border-radius: 3px; 
+  background: #e5e7eb; 
+  outline: none; 
+  opacity: 0.7; 
+  transition: opacity 0.2s; 
+  cursor: pointer; 
+  writing-mode: bt-lr; 
+  -webkit-appearance: slider-vertical;
+}
+#zoom-slider:hover { 
+  opacity: 1;
+}
+#zoom-slider::-webkit-slider-thumb { 
+  -webkit-appearance: none; 
+  appearance: none; 
+  width: 20px; 
+  height: 20px; 
+  border-radius: 50%; 
+  background: #000000; 
+  border: 2px solid #ffffff; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+  cursor: pointer;
+}
+#zoom-slider::-moz-range-thumb { 
+  width: 20px; 
+  height: 20px; 
+  border-radius: 50%; 
+  background: #000000; 
+  border: 2px solid #ffffff; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+  cursor: pointer;
+}
+
+/* Zoom controls container */
+.zoom-controls { 
+  position: fixed; 
+  left: 20px; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 10px; 
+  z-index: 1000; 
+  background: rgba(255, 255, 255, 0.9); 
+  padding: 15px; 
+  border-radius: 10px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  backdrop-filter: blur(10px);
+}
+.zoom-button { 
+  width: 40px; 
+  height: 40px; 
+  border-radius: 50%; 
+  border: none; 
+  background: #3b82f6; 
+  color: white; 
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  transition: all 0.2s; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.zoom-button:hover { 
+  background: #2563eb; 
+  transform: scale(1.05);
+}
+.zoom-button:active { 
+  transform: scale(0.95);
+} 
