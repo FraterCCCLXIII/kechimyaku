@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 
 css:
   .container {max-width: 5000px !important;}
@@ -8,4 +9,28 @@ css:
   h3 The Garden
 
 == render_master_list(@master, 0)
+=======
+/ Admin Masters Page
+div class="min-h-screen bg-background"
+  / Header section
+  section class="py-16 bg-background"
+    div class="container mx-auto px-6"
+      div class="max-w-7xl mx-auto"
+        div class="flex items-center justify-between space-y-2 mb-8"
+          div
+            h2 class="text-2xl font-bold tracking-tight" Lineage Tree
+            p class="text-muted-foreground" Interactive view of all masters and their relationships
+          div class="flex items-center space-x-2"
+            a class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2" href="/admin/masters/add" Add Master
+
+  / Main content section
+  section class="py-8 bg-background"
+    div class="container mx-auto px-6"
+      div class="max-w-7xl mx-auto space-y-6"
+        / Tree visualization
+        div class="rounded-lg border bg-card text-card-foreground shadow-sm"
+          div class="p-6"
+            div class="min-h-[800px] w-full overflow-auto"
+              == render_master_list(@master, 0)
+>>>>>>> Stashed changes
 

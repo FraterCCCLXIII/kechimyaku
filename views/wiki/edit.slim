@@ -1,0 +1,92 @@
+/ Wiki Edit Page with modern shadcn/ui styling
+div class="min-h-screen bg-background"
+  / Header section
+  section class="py-16 bg-background"
+    div class="container mx-auto px-6"
+      div class="max-w-7xl mx-auto"
+        div class="flex items-center justify-between space-y-2 mb-8"
+          div
+            h2 class="text-2xl font-bold tracking-tight" Editing Wiki: #{@master_name}
+            p class="text-muted-foreground" Edit the wiki content for this master
+          div class="flex items-center space-x-2"
+            - if authenticated?
+              span class="text-sm text-green-600" ✓ #{current_user}
+              a class="text-sm text-red-600 hover:text-red-700" href="/logout" Logout
+            - else
+              span class="text-sm text-red-600" ✗ Not authenticated
+              a class="text-sm text-blue-600 hover:text-blue-700" href="/auth/github" Login with GitHub
+            a class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2" href="/wiki/view/#{@master_name.gsub(' ', '_')}" View Page
+
+  / Main content section
+  section class="py-8 bg-background"
+    div class="container mx-auto px-6"
+      div class="max-w-7xl mx-auto space-y-8"
+        / Edit form
+        div class="rounded-lg border bg-card text-card-foreground shadow-sm"
+          form action="/wiki/edit/#{@master_name.gsub(' ', '_')}" method="post"
+            div class="p-6 space-y-6"
+              
+              / Commit message
+              div class="space-y-3"
+                label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="commit_message" Commit Message
+                input type="text" name="commit_message" id="commit_message" value="Update wiki for #{@master_name}" class="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              
+              / Content editor
+              div class="space-y-3"
+                label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="content" Content
+                textarea name="content" id="content" class="flex min-h-[400px] w-full rounded-md border border-input bg-transparent px-4 py-3 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 font-mono" placeholder="Write your wiki content here using Markdown..." =@content
+              
+              / Help text
+              div class="text-sm text-muted-foreground"
+                p Use Markdown syntax for formatting:
+                ul class="list-disc list-inside space-y-1 mt-2"
+                  li
+                    span class="font-mono" # Heading
+                    span  for headings
+                  li
+                    span class="font-mono" **Bold**
+                    span  for bold text
+                  li
+                    span class="font-mono" *Italic*
+                    span  for italic text
+                  li
+                    span class="font-mono" [Link](url)
+                    span  for links
+                  li
+                    span class="font-mono" > Blockquote
+                    span  for blockquotes
+                  li
+                    span class="font-mono" - List item
+                    span  for bullet lists
+                  li
+                    span class="font-mono" 1. Numbered item
+                    span  for numbered lists
+                  li
+                    span class="font-mono" `inline code`
+                    span  for inline code
+                  li
+                    span class="font-mono" ```code block```
+                    span  for code blocks
+
+            / Form actions
+            div class="flex items-center justify-between space-x-2 p-6 pt-0 border-t"
+              div class="flex items-center space-x-2"
+                a class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" href="/admin/masters" Cancel
+                button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2" Save Changes
+              - if authenticated?
+                span class="text-sm text-green-600" Changes will be saved to GitHub
+              - else
+                span class="text-sm text-red-600" Login required to save changes
+
+        / History section
+        - if @history && @history.any?
+          div class="rounded-lg border bg-card text-card-foreground shadow-sm"
+            div class="p-6"
+              h3 class="text-lg font-semibold mb-4" Edit History
+              div class="space-y-3"
+                - @history.each do |commit|
+                  div class="flex items-center justify-between p-3 bg-muted rounded-md"
+                    div
+                      p class="font-medium text-sm" #{commit[:message]}
+                      p class="text-xs text-muted-foreground" By #{commit[:author]} on #{commit[:date].strftime('%B %d, %Y at %I:%M %p')}
+                    a href="#{commit[:url]}" target="_blank" class="text-xs text-blue-600 hover:text-blue-700" View on GitHub 

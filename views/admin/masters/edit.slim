@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 
 .heading
   h3 Edit Master
@@ -35,3 +36,88 @@ form action="#{'/admin/masters/edit/' + params[:id]}" method="post"
   .row
     .col-md-12
       =@wikipedia_content
+=======
+/ Edit Master Page
+div class="min-h-screen bg-background"
+  / Header section
+  section class="py-16 bg-background"
+    div class="container mx-auto px-6"
+      div class="max-w-7xl mx-auto"
+        div class="flex items-center justify-between space-y-2 mb-8"
+          div
+            h2 class="text-2xl font-bold tracking-tight" Edit Master
+            p class="text-muted-foreground" Update master information and relationships
+          div class="flex items-center space-x-2"
+            a class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2" href="/admin" Back to Admin
+
+  / Main content section
+  section class="py-8 bg-background"
+    div class="container mx-auto px-6"
+      div class="max-w-7xl mx-auto space-y-8"
+        / Main form
+        div class="rounded-lg border bg-card text-card-foreground shadow-sm"
+          div class="flex flex-col space-y-1.5 p-6"
+            h3 class="text-lg font-semibold leading-none tracking-tight" Master Information
+            p class="text-sm text-muted-foreground" Update the master's details and relationships
+          
+          form action="#{'/admin/masters/edit/' + params[:id]}" method="post" class="p-6 pt-0 space-y-6"
+            / Name fields
+            div class="grid grid-cols-1 lg:grid-cols-2 gap-6"
+              div class="space-y-3"
+                label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="name" Name
+                input name="name" type="text" class="flex h-10 w-full rounded-md border border-input bg-transparent px-4 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" placeholder="Master Name" value="#{@master.name}"
+              
+              div class="space-y-3"
+                label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="name_native" Native Name
+                input name="name_native" type="text" class="flex h-10 w-full rounded-md border border-input bg-transparent px-4 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" placeholder="Native Name" value="#{@master.name_native}"
+            
+            / Relationship fields
+            div class="grid grid-cols-1 lg:grid-cols-2 gap-6"
+              div class="space-y-3"
+                label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="parent_id" Teacher
+                select name="parent_id" class="flex h-10 w-full rounded-md border border-input bg-transparent px-4 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  option value="" Select Teacher...
+                  - @masters.each do |m|
+                    option value="#{m.id}" selected=("selected" if @relationship != nil && m.id == @relationship.parent_master_id) =m.name
+              
+              div class="space-y-3"
+                label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="relationship_type_id" Transmission Type
+                select name="relationship_type_id" class="flex h-10 w-full rounded-md border border-input bg-transparent px-4 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  option value="" Select Transmission Type...
+                  - @relationship_types.each do |rt|
+                    option value="#{rt.id}" selected=("selected" if @relationship != nil && @relationship.relationship_type_id == rt.id) =rt.name
+            
+            / Year fields
+            div class="grid grid-cols-1 lg:grid-cols-2 gap-6"
+              div class="space-y-3"
+                label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="year_born" Year of Birth
+                input name="year_born" type="text" class="flex h-10 w-full rounded-md border border-input bg-transparent px-4 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" placeholder="e.g. 1500" value="#{@master.year_born}"
+              
+              div class="space-y-3"
+                label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="year_died" Year of Death
+                input name="year_died" type="text" class="flex h-10 w-full rounded-md border border-input bg-transparent px-4 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" placeholder="e.g. 1500" value="#{@master.year_died}"
+            
+            / Location
+            div class="space-y-3"
+              label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="location" Location
+              input name="location" type="text" class="flex h-10 w-full rounded-md border border-input bg-transparent px-4 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" placeholder="Location" value="#{@master.location}"
+            
+            / Overview
+            div class="space-y-3"
+              label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="overview" Overview
+              textarea name="overview" class="flex min-h-[160px] w-full rounded-md border border-input bg-transparent px-4 py-3 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" placeholder="Overview..." rows="10" =@master.overview
+            
+            / Submit button
+            div class="flex justify-end pt-4"
+              button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-6 py-2" Update Master
+
+        / Wikipedia Content Section
+        - if @wikipedia_content
+          div class="rounded-lg border bg-card text-card-foreground shadow-sm"
+            div class="flex flex-col space-y-1.5 p-6"
+              h3 class="text-lg font-semibold leading-none tracking-tight" Wikipedia Content
+              p class="text-sm text-muted-foreground" Content retrieved from Wikipedia
+            div class="p-6 pt-0"
+              div class="prose prose-sm max-w-none"
+                =@wikipedia_content
+>>>>>>> Stashed changes

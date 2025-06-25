@@ -1,0 +1,135 @@
+/ Teachers List Page
+div class="min-h-screen bg-background"
+  / Header section
+  section class="py-16 bg-background"
+    div class="container mx-auto px-6"
+      div class="max-w-7xl mx-auto"
+        div class="flex items-center justify-between space-y-2 mb-8"
+          div
+            h2 class="text-2xl font-bold tracking-tight" All Teachers
+            p class="text-muted-foreground" Complete list of all masters in the lineage
+          div class="flex items-center space-x-2"
+            a class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2" href="/masters/new" Add Master
+
+  / Content section
+  section class="py-8 bg-background"
+    div class="container mx-auto px-6"
+      div class="max-w-7xl mx-auto space-y-8"
+        / Search and filter controls
+        div class="flex flex-col sm:flex-row gap-4"
+          / Search input
+          div class="relative flex-1"
+            input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" type="text" placeholder="Search teachers..." id="teacher-search"
+            svg class="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          
+          / Sort dropdown
+          div class="relative"
+            select class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="sort-select"
+              option value="name" Name A-Z
+              option value="name-desc" Name Z-A
+              option value="id" ID
+              option value="id-desc" ID Descending
+
+        / Teachers table
+        div class="rounded-md border bg-card"
+          div class="relative w-full overflow-auto"
+            table class="w-full caption-bottom text-sm"
+              thead class="[&_tr]:border-b"
+                tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                  th class="h-12 px-6 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0" Name
+                  th class="h-12 px-6 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0" Native Name
+                  th class="h-12 px-6 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0" Actions
+                
+              tbody class="[&_tr:last-child]:border-0"
+                - @masters.each do |master|
+                  tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted" data-id="#{master.id}"
+                    td class="p-6 align-middle [&:has([role=checkbox])]:pr-0"
+                      a class="font-medium text-primary hover:underline cursor-pointer" onclick="openWikiDrawer('#{master.name}')" #{master.name}
+                    td class="p-6 align-middle [&:has([role=checkbox])]:pr-0 text-muted-foreground" #{master.name_native}
+                    td class="p-6 align-middle [&:has([role=checkbox])]:pr-0"
+                      div class="flex items-center space-x-2"
+                        a class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 px-3" href="/masters/#{master.id}/edit" Edit Master
+
+        / Pagination placeholder
+        div class="flex items-center justify-between space-x-2 py-6"
+          div class="text-sm text-muted-foreground"
+            | Showing 
+            span class="font-medium" 1
+            |  to 
+            span class="font-medium" #{@masters.count}
+            |  of 
+            span class="font-medium" #{@masters.count}
+            |  results
+          div class="space-x-2"
+            button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3" disabled="true" Previous
+            button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3" disabled="true" Next
+
+/ JavaScript for search and sort functionality
+script
+  | document.addEventListener('DOMContentLoaded', function() {
+  |   const searchInput = document.getElementById('teacher-search');
+  |   const sortSelect = document.getElementById('sort-select');
+  |   const tableBody = document.querySelector('tbody');
+  |   const rows = Array.from(tableBody.querySelectorAll('tr'));
+  |   
+  |   function filterAndSort() {
+  |     const searchTerm = searchInput.value.toLowerCase();
+  |     const sortBy = sortSelect.value;
+  |     
+  |     // Filter rows
+  |     rows.forEach(row => {
+  |       const nameCell = row.querySelector('td:first-child');
+  |       const nativeNameCell = row.querySelector('td:nth-child(2)');
+  |       const name = nameCell.textContent.toLowerCase();
+  |       const nativeName = nativeNameCell.textContent.toLowerCase();
+  |       
+  |       if (name.includes(searchTerm) || nativeName.includes(searchTerm)) {
+  |         row.style.display = '';
+  |       } else {
+  |         row.style.display = 'none';
+  |       }
+  |     });
+  |     
+  |     // Sort rows
+  |     const visibleRows = rows.filter(row => row.style.display !== 'none');
+  |     visibleRows.sort((a, b) => {
+  |       const aName = a.querySelector('td:first-child').textContent;
+  |       const bName = b.querySelector('td:first-child').textContent;
+  |       const aId = parseInt(a.dataset.id);
+  |       const bId = parseInt(b.dataset.id);
+  |       
+  |       switch(sortBy) {
+  |         case 'name':
+  |           return aName.localeCompare(bName);
+  |         case 'name-desc':
+  |           return bName.localeCompare(aName);
+  |         case 'id':
+  |           return aId - bId;
+  |         case 'id-desc':
+  |           return bId - aId;
+  |         default:
+  |           return 0;
+  |       }
+  |     });
+  |     
+  |     // Reorder rows in DOM
+  |     visibleRows.forEach(row => {
+  |       tableBody.appendChild(row);
+  |     });
+  |   }
+  |   
+  |   searchInput.addEventListener('input', filterAndSort);
+  |   sortSelect.addEventListener('change', filterAndSort);
+  |   
+  |   // Global function to open wiki drawer (for compatibility with tree.js)
+  |   window.openWikiDrawer = function(masterName) {
+  |     if (typeof treeFunctions !== 'undefined' && treeFunctions.openWikiDrawer) {
+  |       treeFunctions.openWikiDrawer(masterName);
+  |     } else {
+  |       // Fallback: open in new window
+  |       const sanitizedName = masterName.replace(/[^\w\-\.]/g, '_');
+  |       window.open('/wiki/edit/' + sanitizedName, '_blank');
+  |     }
+  |   };
+  | }); 

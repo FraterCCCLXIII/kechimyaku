@@ -95,8 +95,62 @@ class Kechimyaku < Sinatra::Base
     slim :"/admin/masters/edit"
   end
 
-  post '/admin/masters/edit/:id' do
+  get '/masters/:id/edit' do
+    @master = Master.find(params[:id])
+    @masters = Master.all
+    @relationship = Relationship.where(child_master_id: @master.id).first 
+    @relationship_types = RelationshipType.all
+    
+    # Get wiki content for the master
+    @wiki_content = get_wiki_content(@master.name) || ''
+    
+    slim :"masters/unified"
+  end
+
+  get '/masters/new' do
+    @master = Master.new
+    @masters = Master.all
+    @relationship_types = RelationshipType.all
+    @wiki_content = ''
+    
+    slim :"masters/unified"
+  end
+
+  post '/masters/new' do
+    new_master = Master.new
+    new_master.name = params[:master][:name]
+    new_master.name_native = params[:master][:name_native]
+    new_master.year_born = params[:master][:year_born]
+    new_master.year_died = params[:master][:year_died]
+    new_master.gender = params[:master][:gender]
+    new_master.location = params[:master][:location]
+    new_master.overview = params[:master][:overview]
+    
+    if params[:master][:parent_id].blank?
+      new_master.is_root = true
+      new_master.save
+    else
+      new_master.is_root = false
+      new_master.save
+      
+      new_relationship = Relationship.new
+      new_relationship.parent_master_id = params[:master][:parent_id]
+      new_relationship.child_master_id = new_master.id
+      new_relationship.relationship_type_id = params[:master][:relationship_type_id]
+      new_relationship.save
+    end
+
+    # Save wiki content if provided
+    if params[:wiki_content].present?
+      save_wiki_content(new_master.name, params[:wiki_content])
+    end
+
+    redirect "/masters/#{new_master.id}/edit"
+  end
+
+  post '/masters/:id/edit' do
     master = Master.find(params[:id])
+<<<<<<< Updated upstream
     previous_master_name_wiki = get_master_name_wiki(master)
     master.name = params[:name]
     master.name_native = params[:name_native]
@@ -104,12 +158,21 @@ class Kechimyaku < Sinatra::Base
     master.year_died = params[:year_died]
     master.location = params[:location]
     master.overview = params[:overview]
+=======
+    master.name = params[:master][:name]
+    master.name_native = params[:master][:name_native]
+    master.year_born = params[:master][:year_born]
+    master.year_died = params[:master][:year_died]
+    master.gender = params[:master][:gender]
+    master.location = params[:master][:location]
+    master.overview = params[:master][:overview]
+>>>>>>> Stashed changes
 
     relationship = Relationship.where(child_master_id: master.id).first 
 
-    if (params[:parent_id] == "")
+    if params[:master][:parent_id].blank?
       master.is_root = true
-      if (relationship != nil)
+      if relationship
         relationship.delete
       end
       master.save
@@ -117,16 +180,17 @@ class Kechimyaku < Sinatra::Base
       master.is_root = false
       master.save
 
-      if (relationship == nil)
+      if relationship.nil?
         relationship = Relationship.new
       end
     
-      relationship.parent_master_id = params[:parent_id]
+      relationship.parent_master_id = params[:master][:parent_id]
       relationship.child_master_id = master.id
-      relationship.relationship_type_id = params[:relationship_type_id]
+      relationship.relationship_type_id = params[:master][:relationship_type_id]
       relationship.save
     end
 
+<<<<<<< Updated upstream
     #rename wiki page if master name has changed
     current_master_name_wiki = get_master_name_wiki(master)
     if previous_master_name_wiki != current_master_name_wiki
@@ -136,12 +200,44 @@ class Kechimyaku < Sinatra::Base
     end
 
     redirect :"admin/masters"  
+=======
+    # Save wiki content if provided
+    if params[:wiki_content].present?
+      save_wiki_content(master.name, params[:wiki_content])
+    end
+
+    redirect "/masters/#{master.id}/edit"
+>>>>>>> Stashed changes
   end
 
   get '/admin/masters/delete/:id' do
     master = Master.find(params[:id])
     master.delete
     redirect :"admin/masters"  
+<<<<<<< Updated upstream
+=======
+  end
+
+  get '/teachers' do
+    @masters = Master.all.order(:name)
+    slim :teachers
+  end
+
+  # Wiki routes with authentication
+  get '/wiki/edit/:master_name' do
+    require_auth!
+    @master_name = params[:master_name].gsub('_', ' ')
+    @content = get_wiki_content(@master_name)
+    @history = get_wiki_history(@master_name)
+    slim :"wiki/edit"
+  end
+
+  post '/wiki/edit/:master_name' do
+    require_auth!
+    master_name = params[:master_name].gsub('_', ' ')
+    content = params[:content]
+    commit_message = params[:commit_message] || "Update wiki for #{master_name}"
+>>>>>>> Stashed changes
     
   end
 

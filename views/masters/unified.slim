@@ -1,0 +1,171 @@
+/ Unified Master Page - Properties + Wiki
+div class="min-h-screen bg-background"
+  / Header section
+  section class="py-16 bg-background"
+    div class="container mx-auto px-6"
+      div class="max-w-7xl mx-auto"
+        div class="flex items-center justify-between space-y-2 mb-8"
+          div
+            h2 class="text-2xl font-bold tracking-tight" 
+              - if @master.new_record?
+                | New Master
+              - else
+                | Edit Master: #{@master.name}
+            p class="text-muted-foreground" Manage master properties and wiki content
+          div class="flex items-center space-x-2"
+            a class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2" href="/teachers" Back to Teachers
+
+  / Main content section
+  section class="py-8 bg-background"
+    div class="container mx-auto px-6"
+      div class="max-w-7xl mx-auto space-y-6"
+        / Main Form
+        form action="#{@master.new_record? ? '/masters/new' : "/masters/#{@master.id}/edit"}" method="post" class="space-y-6"
+          - if @master.persisted?
+            input type="hidden" name="_method" value="put"
+
+          / Tab Navigation
+          div class="border-b mb-6"
+            div class="flex space-x-8"
+              button type="button" class="tab-button active px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300 transition-colors" data-tab="properties" Properties
+              button type="button" class="tab-button px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300 transition-colors" data-tab="wiki" Wiki Content
+
+          / Tab Content
+          div class="space-y-6"
+            / Properties Tab
+            div id="properties-tab" class="tab-content"
+              div class="bg-white rounded-lg border shadow-sm"
+                div class="p-6"
+                  h3 class="text-lg font-semibold mb-4" Master Properties
+                  
+                  / Name Fields
+                  div class="grid grid-cols-1 md:grid-cols-2 gap-6"
+                    div
+                      label class="block text-sm font-medium text-gray-700 mb-2" for="name" Name (English)
+                      input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent" type="text" id="name" name="master[name]" value="#{@master.name}" required="true"
+                    
+                    div
+                      label class="block text-sm font-medium text-gray-700 mb-2" for="name_native" Name (Native)
+                      input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent" type="text" id="name_native" name="master[name_native]" value="#{@master.name_native}"
+                  
+                  / Years
+                  div class="grid grid-cols-1 md:grid-cols-2 gap-6"
+                    div
+                      label class="block text-sm font-medium text-gray-700 mb-2" for="year_born" Year Born
+                      input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent" type="number" id="year_born" name="master[year_born]" value="#{@master.year_born}" min="1" max="9999"
+                    
+                    div
+                      label class="block text-sm font-medium text-gray-700 mb-2" for="year_died" Year Died
+                      input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent" type="number" id="year_died" name="master[year_died]" value="#{@master.year_died}" min="1" max="9999"
+                  
+                  / Additional Fields
+                  div class="grid grid-cols-1 md:grid-cols-2 gap-6"
+                    div
+                      label class="block text-sm font-medium text-gray-700 mb-2" for="gender" Gender
+                      select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent" id="gender" name="master[gender]"
+                        option value="" Select gender...
+                        option value="male" selected="#{@master.gender == 'male'}" Male
+                        option value="female" selected="#{@master.gender == 'female'}" Female
+                        option value="other" selected="#{@master.gender == 'other'}" Other
+                    
+                    div
+                      label class="block text-sm font-medium text-gray-700 mb-2" for="location" Location
+                      input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent" type="text" id="location" name="master[location]" value="#{@master.location}"
+                  
+                  / Overview
+                  div
+                    label class="block text-sm font-medium text-gray-700 mb-2" for="overview" Overview
+                    textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent" id="overview" name="master[overview]" rows="4" placeholder="Brief overview of the master..." #{@master.overview}
+                  
+                  / Parent Selection
+                  div
+                    label class="block text-sm font-medium text-gray-700 mb-2" for="parent_id" Parent Master
+                    select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent" id="parent_id" name="master[parent_id]"
+                      option value="" Select a parent master...
+                      - @masters.each do |master|
+                        - next if master.id == @master.id
+                        - selected = @relationship && @relationship.parent_master_id == master.id
+                        option value="#{master.id}" selected="#{selected}" #{master.name} (#{master.name_native})
+                  
+                  / Relationship Type
+                  div
+                    label class="block text-sm font-medium text-gray-700 mb-2" for="relationship_type_id" Relationship Type
+                    select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent" id="relationship_type_id" name="master[relationship_type_id]"
+                      - @relationship_types.each do |type|
+                        - selected = @relationship && @relationship.relationship_type_id == type.id
+                        option value="#{type.id}" selected="#{selected}" #{type.name}
+
+            / Wiki Tab
+            div id="wiki-tab" class="tab-content hidden"
+              div class="bg-white rounded-lg border shadow-sm"
+                div class="p-6"
+                  h3 class="text-lg font-semibold mb-4" Wiki Content
+                  
+                  - if session[:github_token]
+                    div class="mb-4 p-4 bg-green-50 border border-green-200 rounded-md"
+                      div class="flex items-center"
+                        svg class="w-5 h-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                          path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"
+                        span class="text-green-800 font-medium" Connected to GitHub
+                  - else
+                    div class="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md"
+                      div class="flex items-center"
+                        svg class="w-5 h-5 text-yellow-600 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                          path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"
+                        span class="text-yellow-800" 
+                          | Not connected to GitHub. 
+                          a class="text-yellow-900 underline" href="/auth/github" Connect to GitHub
+                          |  for collaborative editing.
+                  
+                  / Content Editor
+                  div
+                    label class="block text-sm font-medium text-gray-700 mb-2" for="wiki_content" Wiki Content
+                    textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent" id="wiki_content" name="wiki_content" rows="20" placeholder="Enter wiki content in Markdown format..." #{@wiki_content}
+                  
+                  / Help text
+                  div class="text-sm text-muted-foreground mt-4"
+                    p Use Markdown syntax for formatting:
+                    ul class="list-disc list-inside space-y-1 mt-2"
+                      li
+                        | `# Heading` for headings
+                      li
+                        | `**Bold**` for bold text
+                      li
+                        | `*Italic*` for italic text
+                      li
+                        | `[Link](url)` for links
+                      li
+                        | `> Blockquote` for blockquotes
+                      li
+                        | `- List item` for bullet lists
+                      li
+                        | `1. Numbered item` for numbered lists
+                      li
+                        | `` `inline code` `` for inline code
+                      li
+                        | ``` ```code block``` ``` for code blocks
+
+          / Save Button
+          div class="flex justify-end space-x-3 pt-6"
+            button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2" Save Master
+
+/ JavaScript for tab functionality
+script
+  | document.addEventListener('DOMContentLoaded', function() {
+  |   const tabButtons = document.querySelectorAll('.tab-button');
+  |   const tabContents = document.querySelectorAll('.tab-content');
+  |   
+  |   tabButtons.forEach(button => {
+  |     button.addEventListener('click', function() {
+  |       const targetTab = this.getAttribute('data-tab');
+  |       
+  |       // Remove active class from all buttons and contents
+  |       tabButtons.forEach(btn => btn.classList.remove('active', 'border-red-500', 'text-red-600'));
+  |       tabContents.forEach(content => content.classList.add('hidden'));
+  |       
+  |       // Add active class to clicked button and show target content
+  |       this.classList.add('active', 'border-red-500', 'text-red-600');
+  |       document.getElementById(targetTab + '-tab').classList.remove('hidden');
+  |     });
+  |   });
+  | }); 
