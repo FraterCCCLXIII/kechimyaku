@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Master {
+  id           Int            @id @default(autoincrement())
+  name         String?
+  nameNative   String?        @map("name_native")
+  overview     String?
+  yearBorn     Int?           @map("year_born")
+  yearDied     Int?           @map("year_died")
+  gender       String?
+  location     String?
+  isRoot       Boolean?       @map("is_root")
+  wikiEntry    WikiEntry?
+  childLinks   Relationship[] @relation("ParentRelationships")
+  parentLinks  Relationship[] @relation("ChildRelationships")
+
+  @@map("masters")
+  @@index([name])
+  @@index([isRoot])
+}
+
+model RelationshipType {
+  id            Int            @id @default(autoincrement())
+  name          String?
+  relationships Relationship[]
+
+  @@map("relationship_types")
+}
+
+model Relationship {
+  id                 Int               @id @default(autoincrement())
+  parentMasterId     Int               @map("parent_master_id")
+  childMasterId      Int               @map("child_master_id")
+  relationshipTypeId Int?              @map("relationship_type_id")
+  parentMaster       Master            @relation("ParentRelationships", fields: [parentMasterId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  childMaster        Master            @relation("ChildRelationships", fields: [childMasterId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  relationshipType   RelationshipType? @relation(fields: [relationshipTypeId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  @@map("relationships")
+  @@unique([parentMasterId, childMasterId, relationshipTypeId], name: "relationship_unique_triplet")
+  @@index([parentMasterId])
+  @@index([childMasterId])
+}
+
+model WikiEntry {
+  id        Int      @id @default(autoincrement())
+  masterId  Int      @unique
+  content   String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  master    Master   @relation(fields: [masterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("wiki_entries")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  passwordHash String   @map("password_hash")
+  role         String   @default("admin")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("users")
+}
