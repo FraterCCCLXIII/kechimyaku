@@ -20,7 +20,8 @@ type LineageGraphProps = {
 };
 
 const gapX = 260;
-const gapY = 120;
+const gapY = 70;
+const depthGapX = 340;
 
 type LineageNodeData = {
   id: number;
@@ -65,20 +66,42 @@ const nodeTypes: NodeTypes = {
 function flattenTree(
   root: MasterTreeNode,
 ) {
-  const levels: MasterTreeNode[][] = [];
+  const positionById = new Map<number, { x: number; y: number }>();
   const nodes: Node<LineageNodeData>[] = [];
   const edges: Edge[] = [];
+  let leafCursor = 0;
+  const levelWidths: number[] = [];
 
-  const walk = (node: MasterTreeNode, depth: number, parentId?: number) => {
-    if (!levels[depth]) {
-      levels[depth] = [];
+  const countLevelWidths = (node: MasterTreeNode, depth: number) => {
+    levelWidths[depth] = (levelWidths[depth] ?? 0) + 1;
+    for (const child of node.children) {
+      countLevelWidths(child, depth + 1);
     }
-    const index = levels[depth].length;
-    levels[depth].push(node);
+  };
+
+  // Tidy-tree rule: leaves are evenly spaced; internal nodes are centered over children.
+  // This makes branch forks easier to scan and reduces visual crossings.
+  const assignPositions = (node: MasterTreeNode, depth: number): number => {
+    const x = depth * depthGapX;
+    if (!node.children.length) {
+      const y = leafCursor * gapY;
+      leafCursor += 1;
+      positionById.set(node.master.id, { x, y });
+      return y;
+    }
+
+    const childCenters = node.children.map((child) => assignPositions(child, depth + 1));
+    const y = (childCenters[0] + childCenters[childCenters.length - 1]) / 2;
+    positionById.set(node.master.id, { x, y });
+    return y;
+  };
+
+  const createElements = (node: MasterTreeNode, parentId?: number) => {
+    const position = positionById.get(node.master.id) ?? { x: 0, y: 0 };
 
     nodes.push({
       id: String(node.master.id),
-      position: { x: depth * gapX, y: index * gapY },
+      position,
       type: "lineage",
       data: {
         id: node.master.id,
@@ -92,18 +115,59 @@ function flattenTree(
         id: `${parentId}-${node.master.id}`,
         source: String(parentId),
         target: String(node.master.id),
-        type: "smoothstep",
+        type: "step",
         animated: false,
         style: { stroke: "var(--primary-line)", strokeWidth: 1.75 },
       });
     }
 
     for (const child of node.children) {
-      walk(child, depth + 1, node.master.id);
+      createElements(child, node.master.id);
     }
   };
 
-  walk(root, 0);
+  countLevelWidths(root, 0);
+  assignPositions(root, 0);
+
+  // Match legacy D3 behavior: vertical span follows tree breadth (widest level),
+  // not total leaves. This avoids giant vertical gaps on sparse/deep branches.
+  const maxNodesAtAnyDepth = Math.max(...levelWidths, 1);
+  const legacyTargetSpan = Math.max(420, (maxNodesAtAnyDepth - 1) * 140);
+  if (leafCursor > 1) {
+    const entries = Array.from(positionById.entries());
+    let minY = Number.POSITIVE_INFINITY;
+    let maxY = Number.NEGATIVE_INFINITY;
+    for (const [, position] of entries) {
+      if (position.y < minY) minY = position.y;
+      if (position.y > maxY) maxY = position.y;
+    }
+    const span = Math.max(1, maxY - minY);
+
+    if (span > legacyTargetSpan) {
+      const scale = legacyTargetSpan / span;
+      const midY = (minY + maxY) / 2;
+
+      for (const [nodeId, position] of entries) {
+        positionById.set(nodeId, {
+          x: position.x,
+          y: (position.y - midY) * scale + midY,
+        });
+      }
+    }
+  }
+
+  // Normalize around the root so the initial viewport consistently lands on visible nodes.
+  const rootPosition = positionById.get(root.master.id);
+  if (rootPosition) {
+    for (const [nodeId, position] of positionById.entries()) {
+      positionById.set(nodeId, {
+        x: position.x,
+        y: position.y - rootPosition.y,
+      });
+    }
+  }
+
+  createElements(root);
   return { nodes, edges };
 }
 
@@ -119,8 +183,8 @@ export function LineageGraph({ tree }: LineageGraphProps) {
   const router = useRouter();
   const hovercardScreenPosition = hovercard
     ? {
-        x: hovercard.flowX * viewport.zoom + viewport.x + 14,
-        y: hovercard.flowY * viewport.zoom + viewport.y + 18,
+        x: hovercard.flowX * viewport.zoom + viewport.x + gapX / 4,
+        y: hovercard.flowY * viewport.zoom + viewport.y + 14,
       }
     : null;
 

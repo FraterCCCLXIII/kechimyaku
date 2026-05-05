@@ -101,36 +101,6 @@ export function NavSearch() {
       </span>
       {open ? (
         <div className="absolute z-40 mt-1 w-full rounded border border-[var(--hairline)] bg-white shadow-sm">
-          <div className="border-b border-[var(--hairline)] p-2">
-            <div className="relative">
-              <input
-                type="text"
-                aria-label="Search in dropdown"
-                placeholder="Type to filter teachers..."
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                className="w-full rounded border border-[var(--hairline)] bg-[var(--canvas)] px-8 py-1.5 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] focus:border-[var(--primary)] focus:outline-none"
-              />
-              <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--muted)]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-              </span>
-            </div>
-          </div>
-
           <div className="max-h-56 overflow-auto">
             {suggestions.length > 0 ? (
               suggestions.map((teacher) => (

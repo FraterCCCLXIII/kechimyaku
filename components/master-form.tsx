@@ -95,7 +95,7 @@ export function MasterForm({ mode, masters, master }: MasterFormProps) {
     }
 
     setSaving(false);
-    router.push("/admin/masters");
+    router.push("/teachers");
     router.refresh();
   };
 
@@ -110,7 +110,7 @@ export function MasterForm({ mode, masters, master }: MasterFormProps) {
       return;
     }
 
-    router.push("/admin/masters");
+    router.push("/teachers");
     router.refresh();
   };
 
