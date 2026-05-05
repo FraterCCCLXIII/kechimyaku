@@ -1,7 +1,13 @@
 import { LineageGraph } from "@/components/lineage-graph";
 import { getMasterTree } from "@/lib/lineage/tree";
 
-export default async function HomePage() {
+type HomePageProps = {
+  searchParams: Promise<{ focus?: string }>;
+};
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const { focus } = await searchParams;
+  const focusMasterId = focus ? Number.parseInt(focus, 10) : null;
   const tree = await getMasterTree();
 
   if (!tree) {
@@ -12,5 +18,5 @@ export default async function HomePage() {
     );
   }
 
-  return <LineageGraph tree={tree} />;
+  return <LineageGraph tree={tree} focusMasterId={Number.isInteger(focusMasterId) ? focusMasterId : null} />;
 }
