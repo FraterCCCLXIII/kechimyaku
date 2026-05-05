@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   BaseEdge,
@@ -42,6 +42,10 @@ type LineageNodeData = {
   location: string;
   isHighlighted: boolean;
   orientation: LineageOrientation;
+  isDescendant: boolean;
+  hasChildren: boolean;
+  isCollapsed: boolean;
+  onToggleCollapse: (nodeId: number) => void;
 };
 
 type LineageEdgeData = {
@@ -49,11 +53,17 @@ type LineageEdgeData = {
 };
 
 function LineageNode({ data }: NodeProps<Node<LineageNodeData, "lineage">>) {
+  const [isHovered, setIsHovered] = useState(false);
   const targetPosition = data.orientation === "vertical" ? Position.Top : Position.Left;
   const sourcePosition = data.orientation === "vertical" ? Position.Bottom : Position.Right;
+  const showToggle = data.hasChildren && (isHovered || data.isCollapsed);
 
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <Handle
         type="target"
         position={targetPosition}
@@ -61,7 +71,9 @@ function LineageNode({ data }: NodeProps<Node<LineageNodeData, "lineage">>) {
         style={{ backgroundColor: "var(--primary)" }}
       />
       <div
-        className="rounded border px-3 py-2 text-center text-[var(--ink)]"
+        className={`rounded border px-3 py-2 text-[var(--ink)] ${
+          data.orientation === "horizontal" && data.isDescendant ? "text-left" : "text-center"
+        }`}
         title={data.label}
         style={{
           backgroundColor: "var(--canvas)",
@@ -84,6 +96,26 @@ function LineageNode({ data }: NodeProps<Node<LineageNodeData, "lineage">>) {
         className="!h-2 !w-2"
         style={{ backgroundColor: "var(--primary)" }}
       />
+      {showToggle ? (
+        <button
+          type="button"
+          aria-label={data.isCollapsed ? "Expand descendants" : "Collapse descendants"}
+          title={data.isCollapsed ? "Expand descendants" : "Collapse descendants"}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            data.onToggleCollapse(data.id);
+          }}
+          className="absolute z-30 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--primary)] bg-[var(--canvas)] text-[13px] font-semibold leading-none text-[var(--primary)] shadow-sm hover:bg-[var(--surface-card)]"
+          style={
+            data.orientation === "vertical"
+              ? { left: "50%", bottom: "-1px", transform: "translate(-50%, 50%)" }
+              : { right: "-1px", top: "50%", transform: "translate(50%, -50%)" }
+          }
+        >
+          {data.isCollapsed ? "+" : "-"}
+        </button>
+      ) : null}
     </div>
   );
 }
@@ -168,6 +200,8 @@ function flattenTree(
   root: MasterTreeNode,
   highlightedNodeId: number | null,
   orientation: LineageOrientation,
+  collapsedNodeIds: Set<number>,
+  onToggleCollapse: (nodeId: number) => void,
 ) {
   const positionById = new Map<number, { x: number; y: number }>();
   const depthById = new Map<number, number>();
@@ -190,14 +224,16 @@ function flattenTree(
     const leafGap = orientation === "vertical" ? verticalLeafGap : gapY;
     const x = depth * depthGap;
     depthById.set(node.master.id, depth);
-    if (!node.children.length) {
+    const isCollapsed = collapsedNodeIds.has(node.master.id);
+    const visibleChildren = isCollapsed ? [] : node.children;
+    if (!visibleChildren.length) {
       const y = leafCursor * leafGap;
       leafCursor += 1;
       positionById.set(node.master.id, { x, y });
       return y;
     }
 
-    const childCenters = node.children.map((child) => assignPositions(child, depth + 1));
+    const childCenters = visibleChildren.map((child) => assignPositions(child, depth + 1));
     const y = (childCenters[0] + childCenters[childCenters.length - 1]) / 2;
     positionById.set(node.master.id, { x, y });
     return y;
@@ -208,7 +244,7 @@ function flattenTree(
     const parentPosition = positionById.get(node.master.id);
     if (!parentPosition) return;
 
-    if (node.children.length === 1) {
+    if (node.children.length === 1 && !collapsedNodeIds.has(node.master.id)) {
       const child = node.children[0];
       const childPosition = positionById.get(child.master.id);
       if (childPosition) {
@@ -247,6 +283,10 @@ function flattenTree(
         location: node.master.location ?? "",
         isHighlighted: node.master.id === highlightedNodeId,
         orientation,
+        isDescendant: parentId !== undefined,
+        hasChildren: node.children.length > 0,
+        isCollapsed: collapsedNodeIds.has(node.master.id),
+        onToggleCollapse,
       },
     });
 
@@ -260,6 +300,10 @@ function flattenTree(
         animated: false,
         style: { stroke: "var(--primary-line)", strokeWidth: 1.75 },
       });
+    }
+
+    if (collapsedNodeIds.has(node.master.id)) {
+      return;
     }
 
     for (const child of node.children) {
@@ -349,12 +393,26 @@ export function LineageGraph({ tree, focusMasterId = null }: LineageGraphProps) 
   const [hoveredNodeId, setHoveredNodeId] = useState<number | null>(null);
   const [drawerMaster, setDrawerMaster] = useState<LineageNodeData | null>(null);
   const [orientation, setOrientation] = useState<LineageOrientation>("horizontal");
+  const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<number>>(new Set());
   const [flowInstance, setFlowInstance] = useState<ReactFlowInstance<Node<LineageNodeData>, Edge> | null>(
     null,
   );
+
+  const onToggleCollapse = useCallback((nodeId: number) => {
+    setCollapsedNodeIds((previous) => {
+      const next = new Set(previous);
+      if (next.has(nodeId)) {
+        next.delete(nodeId);
+      } else {
+        next.add(nodeId);
+      }
+      return next;
+    });
+  }, []);
+
   const { nodes, edges } = useMemo(
-    () => flattenTree(tree, focusMasterId, orientation),
-    [tree, focusMasterId, orientation],
+    () => flattenTree(tree, focusMasterId, orientation, collapsedNodeIds, onToggleCollapse),
+    [tree, focusMasterId, orientation, collapsedNodeIds, onToggleCollapse],
   );
   const router = useRouter();
   const pathname = usePathname();
@@ -381,11 +439,12 @@ export function LineageGraph({ tree, focusMasterId = null }: LineageGraphProps) 
     const targetNode = nodes.find((node) => node.data.id === focusMasterId);
     if (!targetNode) return;
 
-    flowInstance.setCenter(targetNode.position.x, targetNode.position.y, {
+    const focusX = orientation === "horizontal" ? targetNode.position.x + 150 : targetNode.position.x;
+    flowInstance.setCenter(focusX, targetNode.position.y, {
       zoom: 1,
       duration: 450,
     });
-  }, [flowInstance, focusMasterId, nodes]);
+  }, [flowInstance, focusMasterId, nodes, orientation]);
 
   const highlightedEdgeIds = useMemo(() => {
     const childrenByParent = new Map<number, number[]>();
@@ -468,7 +527,7 @@ export function LineageGraph({ tree, focusMasterId = null }: LineageGraphProps) 
         edges={edgesForRender}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
-        nodeOrigin={[0.5, 0.5]}
+        nodeOrigin={orientation === "horizontal" ? [0, 0.5] : [0.5, 0.5]}
         defaultEdgeOptions={{
           type: "orthogonalRounded",
           style: { stroke: "var(--primary-line)", strokeWidth: 1.75 },
