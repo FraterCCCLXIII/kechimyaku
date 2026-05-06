@@ -51,16 +51,16 @@ export function NavSearch() {
     event.preventDefault();
     const trimmed = query.trim();
     if (!trimmed) {
-      router.push("/teachers");
+      router.push("/index");
       return;
     }
 
-    router.push(`/teachers?search=${encodeURIComponent(trimmed)}`);
+    router.push(`/index?search=${encodeURIComponent(trimmed)}`);
     setOpen(false);
   };
 
   const onSelectSuggestion = (teacher: TeacherOption) => {
-    router.push(`/masters/${teacher.id}`);
+    router.push(`/index/${teacher.id}`);
     setOpen(false);
     setQuery(teacher.name ?? "");
   };
@@ -75,8 +75,8 @@ export function NavSearch() {
     <form onSubmit={onSubmit} className="relative w-80">
       <input
         type="text"
-        aria-label="Search Zen Teachers"
-        placeholder="Search Zen Teachers..."
+        aria-label="Search Directory"
+        placeholder="Search directory..."
         value={query}
         onFocus={() => setOpen(true)}
         onBlur={() => {
@@ -129,7 +129,7 @@ export function NavSearch() {
                   </button>
                   <button
                     type="button"
-                    aria-label={`Open ${teacher.name ?? "teacher"} on graph`}
+                    aria-label={`Open ${teacher.name ?? "entry"} on graph`}
                     title="Open on graph"
                     className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--canvas)] hover:text-[var(--body)]"
                     onMouseDown={(event) => {
@@ -159,7 +159,7 @@ export function NavSearch() {
                   </button>
                   <button
                     type="button"
-                    aria-label={`Open ${teacher.name ?? "teacher"} article`}
+                    aria-label={`Open ${teacher.name ?? "entry"} article`}
                     title="Open article"
                     className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--canvas)] hover:text-[var(--body)]"
                     onMouseDown={(event) => {
@@ -188,7 +188,7 @@ export function NavSearch() {
                 </div>
               ))
             ) : (
-              <div className="px-3 py-3 text-sm text-[var(--muted)]">No matching teachers found.</div>
+              <div className="px-3 py-3 text-sm text-[var(--muted)]">No matching entries found.</div>
             )}
           </div>
         </div>

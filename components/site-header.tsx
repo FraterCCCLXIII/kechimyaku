@@ -19,8 +19,8 @@ export async function SiteHeader() {
             <Link href="/" className="!text-[var(--muted)] hover:!text-[var(--body)]">
               Graph
             </Link>
-            <Link href="/teachers" className="!text-[var(--muted)] hover:!text-[var(--body)]">
-              Teachers
+            <Link href="/index" className="!text-[var(--muted)] hover:!text-[var(--body)]">
+              Index
             </Link>
             <Link href="/about" className="!text-[var(--muted)] hover:!text-[var(--body)]">
               About

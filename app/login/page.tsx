@@ -10,7 +10,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-4 py-12">
       <h1 className="mb-6 text-2xl font-medium tracking-tight">Login</h1>
-      <LoginForm callbackUrl={callbackUrl ?? "/teachers"} />
+      <LoginForm callbackUrl={callbackUrl ?? "/index"} />
     </div>
   );
 }

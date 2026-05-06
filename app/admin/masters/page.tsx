@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default async function AdminMastersPage() {
-  redirect("/teachers");
+  redirect("/index");
 }

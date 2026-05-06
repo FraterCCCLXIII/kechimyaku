@@ -595,7 +595,7 @@ export function LineageGraph({ tree, focusMasterId = null }: LineageGraphProps) 
                 aria-label="View page"
                 title="View page"
                 className="rounded p-1.5 text-[var(--muted)] hover:bg-[var(--surface-card)] hover:text-[var(--body)]"
-                onClick={() => router.push(`/masters/${activeDrawerMaster.id}`)}
+                onClick={() => router.push(`/index/${activeDrawerMaster.id}`)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

@@ -6,5 +6,5 @@ type PageProps = {
 
 export default async function EditMasterPage({ params }: PageProps) {
   const { id } = await params;
-  redirect(`/teachers/${id}/edit`);
+  redirect(`/index/${id}/edit`);
 }

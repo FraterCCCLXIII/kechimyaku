@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default async function NewMasterPage() {
-  redirect("/teachers/new");
+  redirect("/index/new");
 }
