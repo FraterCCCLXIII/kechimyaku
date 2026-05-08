@@ -1,0 +1,94 @@
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/nokogiri-1.8.1/ext/nokogiri
+/Users/paulbloch/.rbenv/versions/2.7.8/bin/ruby -I /Users/paulbloch/.rbenv/versions/2.7.8/lib/ruby/2.7.0 -r ./siteconf20250624-75280-3fbzh1.rb extconf.rb
+checking if the C compiler accepts ... yes
+checking if the C compiler accepts -Wno-error=unused-command-line-argument-hard-error-in-future... no
+Building nokogiri using packaged libraries.
+Using mini_portile version 2.3.0
+checking for iconv.h... yes
+checking for gzdopen() in -lz... yes
+checking for iconv... yes
+************************************************************************
+IMPORTANT NOTICE:
+
+Building Nokogiri with a packaged version of libxml2-2.9.5.
+
+Team Nokogiri will keep on doing their best to provide security
+updates in a timely manner, but if this is a concern for you and want
+to use the system library instead; abort this installation process and
+reinstall nokogiri as follows:
+
+    gem install nokogiri -- --use-system-libraries
+        [--with-xml2-config=/path/to/xml2-config]
+        [--with-xslt-config=/path/to/xslt-config]
+
+If you are using Bundler, tell it to use the option:
+
+    bundle config build.nokogiri --use-system-libraries
+    bundle install
+
+Note, however, that nokogiri is not fully compatible with arbitrary
+versions of libxml2 provided by OS/package vendors.
+************************************************************************
+Extracting libxml2-2.9.5.tar.gz into tmp/arm64-apple-darwin23/ports/libxml2/2.9.5... OK
+Running 'configure' for libxml2 2.9.5... ERROR, review '/Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/nokogiri-1.8.1/ext/nokogiri/tmp/arm64-apple-darwin23/ports/libxml2/2.9.5/configure.log' to see what happened. Last lines are:
+========================================================================
+checking whether to enable maintainer-specific portions of Makefiles... yes
+checking build system type... arm-apple-darwin23.3.0
+checking host system type... Invalid configuration `arm64-apple-darwin23': machine `arm64-apple' not recognized
+configure: error: /bin/sh ./config.sub arm64-apple-darwin23 failed
+========================================================================
+*** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of necessary
+libraries and/or headers.  Check the mkmf.log file for more details.  You may
+need configuration options.
+
+Provided configuration options:
+	--with-opt-dir
+	--without-opt-dir
+	--with-opt-include
+	--without-opt-include=${opt-dir}/include
+	--with-opt-lib
+	--without-opt-lib=${opt-dir}/lib
+	--with-make-prog
+	--without-make-prog
+	--srcdir=.
+	--curdir
+	--ruby=/Users/paulbloch/.rbenv/versions/2.7.8/bin/$(RUBY_BASE_NAME)
+	--help
+	--clean
+	--use-system-libraries
+	--enable-static
+	--disable-static
+	--with-zlib-dir
+	--without-zlib-dir
+	--with-zlib-include
+	--without-zlib-include=${zlib-dir}/include
+	--with-zlib-lib
+	--without-zlib-lib=${zlib-dir}/lib
+	--enable-cross-build
+	--disable-cross-build
+	--with-iconv-dir
+	--without-iconv-dir
+	--with-iconv-include
+	--without-iconv-include=${iconv-dir}/include
+	--with-iconv-lib
+	--without-iconv-lib=${iconv-dir}/lib
+/Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/mini_portile2-2.3.0/lib/mini_portile2/mini_portile.rb:402:in `block in execute': Failed to complete configure task (RuntimeError)
+	from /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/mini_portile2-2.3.0/lib/mini_portile2/mini_portile.rb:373:in `chdir'
+	from /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/mini_portile2-2.3.0/lib/mini_portile2/mini_portile.rb:373:in `execute'
+	from /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/mini_portile2-2.3.0/lib/mini_portile2/mini_portile.rb:110:in `configure'
+	from /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/mini_portile2-2.3.0/lib/mini_portile2/mini_portile.rb:153:in `cook'
+	from extconf.rb:365:in `block (2 levels) in process_recipe'
+	from extconf.rb:257:in `block in chdir_for_build'
+	from extconf.rb:256:in `chdir'
+	from extconf.rb:256:in `chdir_for_build'
+	from extconf.rb:364:in `block in process_recipe'
+	from extconf.rb:262:in `tap'
+	from extconf.rb:262:in `process_recipe'
+	from extconf.rb:548:in `<main>'
+
+To see why this extension failed to compile, please check the mkmf.log which can be found here:
+
+  /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/extensions/arm64-darwin-23/2.7.0/nokogiri-1.8.1/mkmf.log
+
+extconf failed, exit code 1

@@ -1,0 +1,10 @@
+prefix="/usr/local"
+libdir="${prefix}/lib"
+includedir="${prefix}/include"
+
+Name: libgit2
+Description: The git library, take 2
+Version: 0.99.0
+Libs: -L${libdir} -lgit2
+Libs.private: -framework CoreFoundation -framework Security -lz -L/opt/homebrew/Cellar/libssh2/1.11.1/lib -lssh2 -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib -liconv
+Cflags: -I${includedir} 

@@ -1,0 +1,51 @@
+Determining if the prototype qsort_r exists for HAVE_QSORT_R_GNU failed with the following output:
+Change Dir: '/Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-0.99.0/vendor/libgit2/build/CMakeFiles/CMakeTmp'
+
+Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_2e93d/fast
+/Applications/Xcode.app/Contents/Developer/usr/bin/make  -f CMakeFiles/cmTC_2e93d.dir/build.make CMakeFiles/cmTC_2e93d.dir/build
+Building C object CMakeFiles/cmTC_2e93d.dir/CheckPrototypeDefinition.c.o
+/usr/bin/cc   -D_GNU_SOURCE -fPIC -Wall -Wextra -Wdocumentation -Wno-missing-field-initializers -Wstrict-aliasing -Wstrict-prototypes -Wdeclaration-after-statement -Wshift-count-overflow -Wunused-const-variable -Wunused-function -Wint-conversion -Wformat -Wformat-security  -arch arm64 -MD -MT CMakeFiles/cmTC_2e93d.dir/CheckPrototypeDefinition.c.o -MF CMakeFiles/cmTC_2e93d.dir/CheckPrototypeDefinition.c.o.d -o CMakeFiles/cmTC_2e93d.dir/CheckPrototypeDefinition.c.o -c /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-0.99.0/vendor/libgit2/build/CMakeFiles/CMakeTmp/CheckPrototypeDefinition.c
+/Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-0.99.0/vendor/libgit2/build/CMakeFiles/CMakeTmp/CheckPrototypeDefinition.c:14:6: error: conflicting types for 'qsort_r'
+void qsort_r(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *, void *), void *arg) {
+     ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/stdlib.h:346:7: note: previous declaration is here
+void     qsort_r(void *__base, size_t __nel, size_t __width, void *,
+         ^
+1 error generated.
+make[1]: *** [CMakeFiles/cmTC_2e93d.dir/CheckPrototypeDefinition.c.o] Error 1
+make: *** [cmTC_2e93d/fast] Error 2
+
+
+
+#include <stdlib.h>
+
+
+static void cmakeRequireSymbol(int dummy, ...) {
+  (void) dummy;
+}
+
+static void checkSymbol(void) {
+#ifndef qsort_r
+  cmakeRequireSymbol(0, &qsort_r);
+#endif
+}
+
+void qsort_r(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *, void *), void *arg) {
+  return ;
+}
+
+#ifdef __CLASSIC_C__
+int main() {
+  int ac;
+  char*av[];
+#else
+int main(int ac, char *av[]) {
+#endif
+  checkSymbol();
+  if (ac > 1000) {
+    return *av[0];
+  }
+  return 0;
+}
+
+

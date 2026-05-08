@@ -1,0 +1,48 @@
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/charlock_holmes-0.6.9.4/ext/charlock_holmes
+/Users/paulbloch/.rbenv/versions/2.7.8/bin/ruby -I /Users/paulbloch/.rbenv/versions/2.7.8/lib/ruby/2.7.0 -r ./siteconf20250624-90047-1encan.rb extconf.rb
+checking for -licui18n... no
+checking for -licui18n... no
+
+
+***************************************************************************************
+*********** icu required (brew install icu4c or apt-get install libicu-dev) ***********
+***************************************************************************************
+*** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of necessary
+libraries and/or headers.  Check the mkmf.log file for more details.  You may
+need configuration options.
+
+Provided configuration options:
+	--with-opt-dir
+	--without-opt-dir
+	--with-opt-include
+	--without-opt-include=${opt-dir}/include
+	--with-opt-lib
+	--without-opt-lib=${opt-dir}/lib
+	--with-make-prog
+	--without-make-prog
+	--srcdir=.
+	--curdir
+	--ruby=/Users/paulbloch/.rbenv/versions/2.7.8/bin/$(RUBY_BASE_NAME)
+	--with-icu-dir
+	--without-icu-dir
+	--with-icu-include
+	--without-icu-include=${icu-dir}/include
+	--with-icu-lib
+	--without-icu-lib=${icu-dir}/lib
+	--with-icui18n-dir
+	--without-icui18n-dir
+	--with-icui18n-include
+	--without-icui18n-include=${icui18n-dir}/include
+	--with-icui18n-lib
+	--without-icui18n-lib=${icui18n-dir}/lib
+	--with-icui18nlib
+	--without-icui18nlib
+	--with-icui18nlib
+	--without-icui18nlib
+
+To see why this extension failed to compile, please check the mkmf.log which can be found here:
+
+  /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/extensions/arm64-darwin-23/2.7.0/charlock_holmes-0.6.9.4/mkmf.log
+
+extconf failed, exit code 1

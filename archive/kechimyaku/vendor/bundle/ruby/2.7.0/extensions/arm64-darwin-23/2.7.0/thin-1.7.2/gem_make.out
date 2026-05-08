@@ -1,0 +1,59 @@
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/thin-1.7.2/ext/thin_parser
+/Users/paulbloch/.rbenv/versions/2.7.8/bin/ruby -I /Users/paulbloch/.rbenv/versions/2.7.8/lib/ruby/2.7.0 -r ./siteconf20250624-91055-dkdafa.rb extconf.rb
+checking for main() in -lc... yes
+creating Makefile
+
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/thin-1.7.2/ext/thin_parser
+make "DESTDIR=" clean
+
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/thin-1.7.2/ext/thin_parser
+make "DESTDIR="
+compiling parser.c
+compiling thin.c
+thin.c:242:3: error: call to undeclared function 'thin_http_parser_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  thin_http_parser_init(hp);
+  ^
+thin.c:242:3: note: did you mean 'http_parser_init'?
+./parser.h:41:5: note: 'http_parser_init' declared here
+int http_parser_init(http_parser *parser);
+    ^
+thin.c:260:3: error: call to undeclared function 'thin_http_parser_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  thin_http_parser_init(http);
+  ^
+thin.c:277:3: error: call to undeclared function 'thin_http_parser_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  thin_http_parser_init(http);
+  ^
+thin.c:294:3: error: call to undeclared function 'thin_http_parser_finish'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  thin_http_parser_finish(http);
+  ^
+thin.c:294:3: note: did you mean 'Thin_HttpParser_finish'?
+thin.c:290:7: note: 'Thin_HttpParser_finish' declared here
+VALUE Thin_HttpParser_finish(VALUE self)
+      ^
+thin.c:296:10: error: call to undeclared function 'thin_http_parser_is_finished'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  return thin_http_parser_is_finished(http) ? Qtrue : Qfalse;
+         ^
+thin.c:334:5: error: call to undeclared function 'thin_http_parser_execute'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    thin_http_parser_execute(http, dptr, dlen, from);
+    ^
+thin.c:334:5: note: did you mean 'Thin_HttpParser_execute'?
+thin.c:317:7: note: 'Thin_HttpParser_execute' declared here
+VALUE Thin_HttpParser_execute(VALUE self, VALUE req_hash, VALUE data, VALUE start)
+      ^
+thin.c:338:8: error: call to undeclared function 'thin_http_parser_has_error'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    if(thin_http_parser_has_error(http)) {
+       ^
+thin.c:338:8: note: did you mean 'http_parser_has_error'?
+./parser.h:44:5: note: 'http_parser_has_error' declared here
+int http_parser_has_error(http_parser *parser);
+    ^
+thin.c:359:10: error: call to undeclared function 'thin_http_parser_has_error'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  return thin_http_parser_has_error(http) ? Qtrue : Qfalse;
+         ^
+thin.c:374:10: error: call to undeclared function 'thin_http_parser_is_finished'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  return thin_http_parser_is_finished(http) ? Qtrue : Qfalse;
+         ^
+9 errors generated.
+make: *** [thin.o] Error 1
+
+make failed, exit code 2

@@ -1,0 +1,4 @@
+checking whether to enable maintainer-specific portions of Makefiles... yes
+checking build system type... arm-apple-darwin23.3.0
+checking host system type... Invalid configuration `arm64-apple-darwin23': machine `arm64-apple' not recognized
+configure: error: /bin/sh ./config.sub arm64-apple-darwin23 failed

@@ -1,0 +1,178 @@
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-0.99.0/ext/rugged
+/Users/paulbloch/.rbenv/versions/2.7.8/bin/ruby -I /Users/paulbloch/.rbenv/versions/2.7.8/lib/ruby/2.7.0 -r ./siteconf20250624-75280-rx3ipn.rb extconf.rb
+checking for gmake... no
+checking for make... yes
+checking for cmake... yes
+checking for pkg-config... yes
+CMake Warning (dev) at CMakeLists.txt:14 (PROJECT):
+  cmake_minimum_required() should be called prior to this top-level project()
+  call.  Please see the cmake-commands(7) manual for usage documentation of
+  both commands.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- The C compiler identification is AppleClang 15.0.0.15000309
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+CMake Deprecation Warning at CMakeLists.txt:15 (CMAKE_MINIMUM_REQUIRED):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Found PkgConfig: /opt/homebrew/bin/pkg-config (found version "2.5.0")
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- Performing Test HAVE_STRUCT_STAT_ST_MTIM
+-- Performing Test HAVE_STRUCT_STAT_ST_MTIM - Failed
+-- Performing Test HAVE_STRUCT_STAT_ST_MTIMESPEC
+-- Performing Test HAVE_STRUCT_STAT_ST_MTIMESPEC - Success
+-- Performing Test HAVE_STRUCT_STAT_MTIME_NSEC
+-- Performing Test HAVE_STRUCT_STAT_MTIME_NSEC - Failed
+-- Performing Test HAVE_STRUCT_STAT_NSEC
+-- Performing Test HAVE_STRUCT_STAT_NSEC - Success
+-- Performing Test IS_WALL_SUPPORTED
+-- Performing Test IS_WALL_SUPPORTED - Success
+-- Performing Test IS_WEXTRA_SUPPORTED
+-- Performing Test IS_WEXTRA_SUPPORTED - Success
+-- Performing Test IS_WDOCUMENTATION_SUPPORTED
+-- Performing Test IS_WDOCUMENTATION_SUPPORTED - Success
+-- Performing Test IS_WNO_MISSING_FIELD_INITIALIZERS_SUPPORTED
+-- Performing Test IS_WNO_MISSING_FIELD_INITIALIZERS_SUPPORTED - Success
+-- Performing Test IS_WSTRICT_ALIASING_SUPPORTED
+-- Performing Test IS_WSTRICT_ALIASING_SUPPORTED - Success
+-- Performing Test IS_WSTRICT_PROTOTYPES_SUPPORTED
+-- Performing Test IS_WSTRICT_PROTOTYPES_SUPPORTED - Success
+-- Performing Test IS_WDECLARATION_AFTER_STATEMENT_SUPPORTED
+-- Performing Test IS_WDECLARATION_AFTER_STATEMENT_SUPPORTED - Success
+-- Performing Test IS_WSHIFT_COUNT_OVERFLOW_SUPPORTED
+-- Performing Test IS_WSHIFT_COUNT_OVERFLOW_SUPPORTED - Success
+-- Performing Test IS_WUNUSED_CONST_VARIABLE_SUPPORTED
+-- Performing Test IS_WUNUSED_CONST_VARIABLE_SUPPORTED - Success
+-- Performing Test IS_WUNUSED_FUNCTION_SUPPORTED
+-- Performing Test IS_WUNUSED_FUNCTION_SUPPORTED - Success
+-- Performing Test IS_WINT_CONVERSION_SUPPORTED
+-- Performing Test IS_WINT_CONVERSION_SUPPORTED - Success
+-- Performing Test IS_WFORMAT_SUPPORTED
+-- Performing Test IS_WFORMAT_SUPPORTED - Success
+-- Performing Test IS_WFORMAT_SECURITY_SUPPORTED
+-- Performing Test IS_WFORMAT_SECURITY_SUPPORTED - Success
+-- Looking for futimens
+-- Looking for futimens - found
+-- Checking prototype qsort_r for HAVE_QSORT_R_BSD - True
+-- Checking prototype qsort_r for HAVE_QSORT_R_GNU - False
+-- Looking for qsort_s
+-- Looking for qsort_s - not found
+-- Looking for clock_gettime in rt
+-- Looking for clock_gettime in rt - not found
+-- Found OpenSSL: /opt/homebrew/Cellar/openssl@3/3.5.0/lib/libcrypto.dylib (found version "3.5.0")
+-- Found Security /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/Security.framework
+-- Looking for SSLCreateContext in /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/Security.framework
+-- Looking for SSLCreateContext in /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/Security.framework - found
+-- Found CoreFoundation /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/CoreFoundation.framework
+-- Could NOT find PCRE (missing: PCRE_INCLUDE_DIR) 
+-- Looking for dirent.h
+-- Looking for dirent.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for inttypes.h
+-- Looking for inttypes.h - found
+-- Looking for sys/stat.h
+-- Looking for sys/stat.h - found
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for unistd.h
+-- Looking for unistd.h - found
+-- Looking for windows.h
+-- Looking for windows.h - not found
+-- Looking for bcopy
+-- Looking for bcopy - found
+-- Looking for memmove
+-- Looking for memmove - found
+-- Looking for strerror
+-- Looking for strerror - found
+-- Looking for strtoll
+-- Looking for strtoll - found
+-- Looking for strtoq
+-- Looking for strtoq - found
+-- Looking for _strtoi64
+-- Looking for _strtoi64 - not found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of long long
+-- Check size of long long - done
+-- Check size of unsigned long long
+-- Check size of unsigned long long - done
+-- Performing Test IS_WNO_UNUSED_FUNCTION_SUPPORTED
+-- Performing Test IS_WNO_UNUSED_FUNCTION_SUPPORTED - Success
+-- Performing Test IS_WNO_IMPLICIT_FALLTHROUGH_SUPPORTED
+-- Performing Test IS_WNO_IMPLICIT_FALLTHROUGH_SUPPORTED - Success
+-- http-parser version 2 was not found or disabled; using bundled 3rd-party sources.
+-- Performing Test IS_WIMPLICIT_FALLTHROUGH_1_SUPPORTED
+-- Performing Test IS_WIMPLICIT_FALLTHROUGH_1_SUPPORTED - Failed
+-- Found ZLIB: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/libz.tbd (found version "1.2.12")
+-- Checking for module 'libssh2'
+--   Found libssh2, version 1.11.1
+--   Resolved libraries: /opt/homebrew/lib/libssh2.dylib
+-- Looking for libssh2_userauth_publickey_frommemory in /opt/homebrew/lib/libssh2.dylib
+-- Looking for libssh2_userauth_publickey_frommemory in /opt/homebrew/lib/libssh2.dylib - found
+-- Checking for module 'heimdal-gssapi'
+--   Package 'heimdal-gssapi' not found
+-- Could NOT find GSSAPI (missing: GSSAPI_LIBRARIES) 
+-- Found GSS.framework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/GSS.framework
+-- Looking for iconv_open
+-- Looking for iconv_open - not found
+-- Found Iconv: -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib -liconv
+-- Enabled features:
+ * nanoseconds, whether to use sub-second file mtimes and ctimes
+ * tracing, tracing support
+ * threadsafe, threadsafe support
+ * HTTPS, using SecureTransport
+ * SHA, using CollisionDetection
+ * regex, using bundled PCRE
+ * http-parser, http-parser support (bundled)
+ * zlib, using system zlib
+ * SSH, SSH transport support
+ * ntlmclient, NTLM authentication support for Unix
+ * iconv, iconv encoding conversion support
+
+-- Disabled features:
+ * debugpool, debug pool allocator
+ * SPNEGO, SPNEGO authentication support
+
+-- Configuring done (5.6s)
+-- Generating done (0.1s)
+-- Build files have been written to: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-0.99.0/vendor/libgit2/build
+ -- /usr/bin/make
+checking for -lgit2... yes
+checking for git2.h... yes
+creating Makefile
+
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-0.99.0/ext/rugged
+make "DESTDIR=" clean
+
+current directory: /Users/paulbloch/Kechimyaku/kechimyaku/vendor/bundle/ruby/2.7.0/gems/rugged-0.99.0/ext/rugged
+make "DESTDIR="
+compiling rugged.c
+rugged.c:296:31: error: incompatible function pointer types passing 'VALUE (*)(VALUE, git_oid_shorten *)' (aka 'unsigned long (*)(unsigned long, struct git_oid_shorten *)') to parameter of type 'rb_block_call_func_t' (aka 'unsigned long (*)(unsigned long, unsigned long, int, const unsigned long *, unsigned long)') [-Wincompatible-function-pointer-types]
+        rb_iterate(rb_each, rb_enum, &minimize_cb, (VALUE)shrt);
+                                     ^~~~~~~~~~~~
+/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/ruby.h:1986:60: note: passing argument to parameter here
+VALUE rb_iterate(VALUE(*)(VALUE),VALUE,rb_block_call_func_t,VALUE);
+                                                           ^
+rugged.c:308:32: error: incompatible function pointer types passing 'VALUE (*)(VALUE, VALUE *)' (aka 'unsigned long (*)(unsigned long, unsigned long *)') to parameter of type 'rb_block_call_func_t' (aka 'unsigned long (*)(unsigned long, unsigned long, int, const unsigned long *, unsigned long)') [-Wincompatible-function-pointer-types]
+                rb_iterate(rb_each, rb_enum, &minimize_yield, (VALUE)yield_data);
+                                             ^~~~~~~~~~~~~~~
+/Users/paulbloch/.rbenv/versions/2.7.8/include/ruby-2.7.0/ruby/ruby.h:1986:60: note: passing argument to parameter here
+VALUE rb_iterate(VALUE(*)(VALUE),VALUE,rb_block_call_func_t,VALUE);
+                                                           ^
+2 errors generated.
+make: *** [rugged.o] Error 1
+
+make failed, exit code 2
