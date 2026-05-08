@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
@@ -10,7 +11,7 @@ type LoginFormProps = {
 
 export function LoginForm({ callbackUrl }: LoginFormProps) {
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,7 +22,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
     setError("");
 
     const result = await signIn("credentials", {
-      username,
+      identifier,
       password,
       redirect: false,
       callbackUrl,
@@ -43,14 +44,15 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
       className="space-y-4 rounded border border-[var(--hairline)] bg-[var(--canvas)] p-6"
     >
       <div>
-        <label htmlFor="username" className="mb-1 block text-sm font-medium">
-          Username
+        <label htmlFor="identifier" className="mb-1 block text-sm font-medium">
+          Email or username
         </label>
         <input
-          id="username"
+          id="identifier"
           type="text"
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
+          autoComplete="username email"
+          value={identifier}
+          onChange={(event) => setIdentifier(event.target.value)}
           className="w-full rounded border border-[var(--hairline)] px-3 py-2"
           required
         />
@@ -62,6 +64,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
         <input
           id="password"
           type="password"
+          autoComplete="current-password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           className="w-full rounded border border-[var(--hairline)] px-3 py-2"
@@ -76,6 +79,11 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
       >
         {loading ? "Signing in..." : "Sign in"}
       </button>
+      <p className="text-center text-xs text-[var(--muted)]">
+        <Link href="/forgot-password" className="!text-[var(--muted)] hover:!text-[var(--body)]">
+          Forgot password?
+        </Link>
+      </p>
     </form>
   );
 }

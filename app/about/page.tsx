@@ -57,6 +57,13 @@ export default function AboutPage() {
         Rather than treating lineage as a single unquestioned story, Kechimyaku
         aims to make the record legible, comparable, and open to study.
       </p>
+      <section className="space-y-3">
+        <h2 className="text-lg font-medium text-[var(--ink)]">Project origins</h2>
+        <p className="leading-7 text-[var(--body)]">
+          Kechimyaku was started by Paul Bloch with the help of Ken Miller in
+          April 2018.
+        </p>
+      </section>
     </div>
   );
 }

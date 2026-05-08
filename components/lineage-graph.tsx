@@ -29,6 +29,7 @@ const verticalLeafGap = 360;
 const verticalDepthGap = 145;
 
 type LineageOrientation = "horizontal" | "vertical";
+type LineageViewMode = "horizontal" | "vertical" | "list";
 
 type LineageNodeData = {
   id: number;
@@ -106,14 +107,17 @@ function LineageNode({ data }: NodeProps<Node<LineageNodeData, "lineage">>) {
             event.stopPropagation();
             data.onToggleCollapse(data.id);
           }}
-          className="absolute z-30 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--primary)] bg-[var(--canvas)] text-[13px] font-semibold leading-none text-[var(--primary)] shadow-sm hover:bg-[var(--surface-card)]"
+          className="absolute z-30 inline-flex h-4 w-4 items-center justify-center rounded-full border border-red-600 bg-red-500 text-white hover:bg-red-600"
           style={
             data.orientation === "vertical"
               ? { left: "50%", bottom: "-1px", transform: "translate(-50%, 50%)" }
               : { right: "-1px", top: "50%", transform: "translate(50%, -50%)" }
           }
         >
-          {data.isCollapsed ? "+" : "-"}
+          <span aria-hidden="true" className="absolute h-px w-2 bg-current" />
+          {data.isCollapsed ? (
+            <span aria-hidden="true" className="absolute h-2 w-px bg-current" />
+          ) : null}
         </button>
       ) : null}
     </div>
@@ -195,6 +199,15 @@ function OrthogonalRoundedEdge({
 const edgeTypes = {
   orthogonalRounded: OrthogonalRoundedEdge,
 };
+
+function findAncestorIds(root: MasterTreeNode, targetId: number): number[] | null {
+  if (root.master.id === targetId) return [];
+  for (const child of root.children) {
+    const inner = findAncestorIds(child, targetId);
+    if (inner) return [root.master.id, ...inner];
+  }
+  return null;
+}
 
 function flattenTree(
   root: MasterTreeNode,
@@ -392,11 +405,25 @@ function flattenTree(
 export function LineageGraph({ tree, focusMasterId = null }: LineageGraphProps) {
   const [hoveredNodeId, setHoveredNodeId] = useState<number | null>(null);
   const [drawerMaster, setDrawerMaster] = useState<LineageNodeData | null>(null);
-  const [orientation, setOrientation] = useState<LineageOrientation>("horizontal");
+  const [viewMode, setViewMode] = useState<LineageViewMode>("horizontal");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stored = window.localStorage.getItem("lineage-view-mode");
+    if (stored === "horizontal" || stored === "vertical" || stored === "list") {
+      setViewMode(stored);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem("lineage-view-mode", viewMode);
+  }, [viewMode]);
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<number>>(new Set());
   const [flowInstance, setFlowInstance] = useState<ReactFlowInstance<Node<LineageNodeData>, Edge> | null>(
     null,
   );
+  const orientation: LineageOrientation = viewMode === "vertical" ? "vertical" : "horizontal";
 
   const onToggleCollapse = useCallback((nodeId: number) => {
     setCollapsedNodeIds((previous) => {
@@ -435,6 +462,18 @@ export function LineageGraph({ tree, focusMasterId = null }: LineageGraphProps) 
   const activeDrawerMaster = focusedMasterFromUrl ?? drawerMaster;
 
   useEffect(() => {
+    if (focusMasterId == null) return;
+    const ancestors = findAncestorIds(tree, focusMasterId);
+    if (!ancestors || ancestors.length === 0) return;
+    setCollapsedNodeIds((previous) => {
+      if (ancestors.every((id) => !previous.has(id))) return previous;
+      const next = new Set(previous);
+      for (const id of ancestors) next.delete(id);
+      return next;
+    });
+  }, [focusMasterId, tree]);
+
+  useEffect(() => {
     if (!flowInstance || !focusMasterId) return;
     const targetNode = nodes.find((node) => node.data.id === focusMasterId);
     if (!targetNode) return;
@@ -445,6 +484,15 @@ export function LineageGraph({ tree, focusMasterId = null }: LineageGraphProps) 
       duration: 450,
     });
   }, [flowInstance, focusMasterId, nodes, orientation]);
+
+  useEffect(() => {
+    if (viewMode !== "list" || focusMasterId == null) return;
+    if (typeof document === "undefined") return;
+    const element = document.querySelector(`[data-master-id="${focusMasterId}"]`);
+    if (element instanceof HTMLElement) {
+      element.scrollIntoView({ block: "center", behavior: "smooth" });
+    }
+  }, [viewMode, focusMasterId, collapsedNodeIds]);
 
   const highlightedEdgeIds = useMemo(() => {
     const childrenByParent = new Map<number, number[]>();
@@ -520,64 +568,294 @@ export function LineageGraph({ tree, focusMasterId = null }: LineageGraphProps) 
     [edges, highlightedEdgeIds],
   );
 
+  const renderNestedListNode = useCallback(
+    (
+      node: MasterTreeNode,
+      depth = 0,
+      isLastSibling = true,
+      parentMasterId: number | null = null,
+      hasHighlightedLaterSibling = false,
+    ) => {
+      const label = `${node.master.name ?? "Unknown"} ${node.master.nameNative ?? ""}`.trim();
+      const hasChildren = node.children.length > 0;
+      const isCollapsed = collapsedNodeIds.has(node.master.id);
+      const isActive = activeDrawerMaster?.id === node.master.id;
+      const incomingEdgeHighlighted =
+        parentMasterId != null && highlightedEdgeIds.has(`${parentMasterId}-${node.master.id}`);
+      const highlightedChildEdges = hasChildren
+        ? node.children.filter((child) =>
+            highlightedEdgeIds.has(`${node.master.id}-${child.master.id}`),
+          )
+        : [];
+      const childBranchHighlighted = highlightedChildEdges.length > 0;
+
+      return (
+        <li key={node.master.id} data-master-id={node.master.id} className="relative">
+          {depth > 0 ? (
+            <>
+              {!isLastSibling ? (
+                <span
+                  aria-hidden="true"
+                  className={`pointer-events-none absolute -left-[17px] top-0 h-full ${
+                    hasHighlightedLaterSibling ? "w-0.5 bg-red-500" : "w-px bg-red-500"
+                  }`}
+                />
+              ) : null}
+              <span
+                aria-hidden="true"
+                className={`pointer-events-none absolute -left-[17px] top-0 h-3 w-[17px] rounded-bl-[8px] ${
+                  incomingEdgeHighlighted
+                    ? "border-b-2 border-l-2 border-red-500"
+                    : "border-b border-l border-red-500"
+                }`}
+              />
+            </>
+          ) : null}
+          <div className="flex h-6 items-center gap-1">
+            <span aria-hidden="true" className="relative inline-block h-5 w-1.5">
+              <span
+                className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-500 ${
+                  isActive ? "h-2.5 w-2.5" : "h-1.5 w-1.5"
+                }`}
+              />
+              {hasChildren ? (
+                <span
+                  aria-hidden="true"
+                  className={`pointer-events-none absolute left-0 top-1/2 h-[22px] -translate-x-1/2 ${
+                    childBranchHighlighted ? "w-0.5 bg-red-500" : "w-px bg-red-500"
+                  }`}
+                />
+              ) : null}
+            </span>
+            <button
+              type="button"
+              className={`whitespace-nowrap text-left text-[13px] leading-5 hover:text-[var(--ink)] hover:underline ${
+                isActive ? "font-semibold text-[var(--ink)]" : "text-[var(--body)]"
+              }`}
+              onClick={() => {
+                setDrawerMaster({
+                  id: node.master.id,
+                  label,
+                  overview: node.master.overview ?? "",
+                  name: node.master.name ?? "Unknown",
+                  nameNative: node.master.nameNative ?? "",
+                  yearBorn: node.master.yearBorn,
+                  yearDied: node.master.yearDied,
+                  gender: node.master.gender ?? "",
+                  location: node.master.location ?? "",
+                  isHighlighted: false,
+                  orientation,
+                  isDescendant: depth > 0,
+                  hasChildren,
+                  isCollapsed,
+                  onToggleCollapse,
+                });
+                updateFocusInUrl(node.master.id);
+              }}
+            >
+              {label}
+            </button>
+          </div>
+          {hasChildren ? (
+            <div className="flex h-5 items-center gap-1">
+              <div className="relative inline-flex h-5 w-1.5 items-center">
+                <button
+                  type="button"
+                  aria-label={isCollapsed ? "Expand descendants" : "Collapse descendants"}
+                  title={isCollapsed ? "Expand descendants" : "Collapse descendants"}
+                  className="absolute left-0 top-1/2 z-10 inline-flex h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-red-600 bg-red-500 text-white hover:bg-red-600"
+                  onClick={() => onToggleCollapse(node.master.id)}
+                >
+                  <span aria-hidden="true" className="absolute h-px w-1.5 bg-current" />
+                  {isCollapsed ? (
+                    <span aria-hidden="true" className="absolute h-1.5 w-px bg-current" />
+                  ) : null}
+                </button>
+                {!isCollapsed ? (
+                  <span
+                    aria-hidden="true"
+                    className={`pointer-events-none absolute left-0 top-1/2 z-0 h-2.5 -translate-x-1/2 ${
+                      childBranchHighlighted ? "w-0.5 bg-red-500" : "w-px bg-red-500"
+                    }`}
+                  />
+                ) : null}
+              </div>
+              <span aria-hidden="true" className="inline-block h-5 w-5" />
+            </div>
+          ) : null}
+          {hasChildren && !isCollapsed ? (
+            <ul className="relative ml-[16.5px]">
+              {node.children.map((child, childIndex) => {
+                const isLastChild = childIndex === node.children.length - 1;
+                const laterSiblingHighlighted = node.children
+                  .slice(childIndex + 1)
+                  .some((later) =>
+                    highlightedEdgeIds.has(`${node.master.id}-${later.master.id}`),
+                  );
+                return renderNestedListNode(
+                  child,
+                  depth + 1,
+                  isLastChild,
+                  node.master.id,
+                  laterSiblingHighlighted,
+                );
+              })}
+            </ul>
+          ) : null}
+        </li>
+      );
+    },
+    [
+      activeDrawerMaster?.id,
+      collapsedNodeIds,
+      highlightedEdgeIds,
+      onToggleCollapse,
+      orientation,
+      updateFocusInUrl,
+    ],
+  );
+
   return (
     <div className="relative h-[calc(100vh-57px)] w-full bg-[var(--canvas)]">
-      <ReactFlow
-        nodes={nodes}
-        edges={edgesForRender}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        nodeOrigin={orientation === "horizontal" ? [0, 0.5] : [0.5, 0.5]}
-        defaultEdgeOptions={{
-          type: "orthogonalRounded",
-          style: { stroke: "var(--primary-line)", strokeWidth: 1.75 },
-        }}
-        defaultViewport={{ x: 40, y: 140, zoom: 1 }}
-        minZoom={0.05}
-        maxZoom={2}
-        onInit={(instance) => setFlowInstance(instance)}
-        onNodeMouseEnter={(_, node) => setHoveredNodeId(node.data.id)}
-        onNodeMouseLeave={() => setHoveredNodeId(null)}
-        onNodeClick={(_, node) => {
-          setDrawerMaster(node.data);
-          updateFocusInUrl(node.data.id);
-        }}
-        onPaneClick={() => {
-          setDrawerMaster(null);
-          updateFocusInUrl(null);
-        }}
-      >
-        <Controls />
-      </ReactFlow>
-      <div className="absolute left-3 top-3 z-40">
-        <button
-          type="button"
-          aria-label={`Switch to ${orientation === "horizontal" ? "vertical" : "horizontal"} tree view`}
-          title={orientation === "horizontal" ? "Switch to vertical view" : "Switch to horizontal view"}
-          className="inline-flex items-center gap-2 rounded border border-[var(--hairline)] bg-[var(--canvas)] px-3 py-2 text-sm text-[var(--body)] hover:bg-[var(--surface-card)]"
-          onClick={() => setOrientation((value) => (value === "horizontal" ? "vertical" : "horizontal"))}
+      {viewMode === "list" ? (
+        <div
+          className={`h-full overflow-auto pb-6 pl-4 pt-14 ${
+            activeDrawerMaster ? "pr-[calc(1rem+360px+1rem)]" : "pr-4"
+          }`}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            style={{ transform: orientation === "horizontal" ? "rotate(-90deg)" : "none" }}
-            aria-hidden="true"
+          <div className="min-w-max">
+            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--muted)]">
+              Lineage List
+            </h2>
+            <ul>{renderNestedListNode(tree)}</ul>
+          </div>
+        </div>
+      ) : (
+        <ReactFlow
+          nodes={nodes}
+          edges={edgesForRender}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          nodeOrigin={orientation === "horizontal" ? [0, 0.5] : [0.5, 0.5]}
+          defaultEdgeOptions={{
+            type: "orthogonalRounded",
+            style: { stroke: "var(--primary-line)", strokeWidth: 1.75 },
+          }}
+          defaultViewport={{ x: 40, y: 140, zoom: 1 }}
+          minZoom={0.05}
+          maxZoom={2}
+          onInit={(instance) => setFlowInstance(instance)}
+          onNodeMouseEnter={(_, node) => setHoveredNodeId(node.data.id)}
+          onNodeMouseLeave={() => setHoveredNodeId(null)}
+          onNodeClick={(_, node) => {
+            setDrawerMaster(node.data);
+            updateFocusInUrl(node.data.id);
+          }}
+          onPaneClick={() => {
+            setDrawerMaster(null);
+            updateFocusInUrl(null);
+          }}
+        >
+          <Controls />
+        </ReactFlow>
+      )}
+      <div className="absolute left-3 top-3 z-40">
+        <div className="inline-flex items-center gap-1 rounded border border-[var(--hairline)] bg-[var(--canvas)] p-1">
+          <button
+            type="button"
+            aria-label="Horizontal tree view"
+            aria-pressed={viewMode === "horizontal"}
+            title="Horizontal view"
+            className={`rounded p-1.5 ${
+              viewMode === "horizontal"
+                ? "bg-[var(--surface-card)] text-[var(--body)]"
+                : "text-[var(--muted)] hover:bg-[var(--surface-card)] hover:text-[var(--body)]"
+            }`}
+            onClick={() => setViewMode("horizontal")}
           >
-            <rect x="16" y="16" width="6" height="6" rx="1" />
-            <rect x="2" y="16" width="6" height="6" rx="1" />
-            <rect x="9" y="2" width="6" height="6" rx="1" />
-            <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" />
-            <path d="M12 12V8" />
-          </svg>
-          <span>{orientation === "horizontal" ? "Horizontal" : "Vertical"}</span>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ transform: "rotate(-90deg)" }}
+              aria-hidden="true"
+            >
+              <rect x="16" y="16" width="6" height="6" rx="1" />
+              <rect x="2" y="16" width="6" height="6" rx="1" />
+              <rect x="9" y="2" width="6" height="6" rx="1" />
+              <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" />
+              <path d="M12 12V8" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label="Vertical tree view"
+            aria-pressed={viewMode === "vertical"}
+            title="Vertical view"
+            className={`rounded p-1.5 ${
+              viewMode === "vertical"
+                ? "bg-[var(--surface-card)] text-[var(--body)]"
+                : "text-[var(--muted)] hover:bg-[var(--surface-card)] hover:text-[var(--body)]"
+            }`}
+            onClick={() => setViewMode("vertical")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="16" y="16" width="6" height="6" rx="1" />
+              <rect x="2" y="16" width="6" height="6" rx="1" />
+              <rect x="9" y="2" width="6" height="6" rx="1" />
+              <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" />
+              <path d="M12 12V8" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label="Nested list view"
+            aria-pressed={viewMode === "list"}
+            title="Nested list view"
+            className={`rounded p-1.5 ${
+              viewMode === "list"
+                ? "bg-[var(--surface-card)] text-[var(--body)]"
+                : "text-[var(--muted)] hover:bg-[var(--surface-card)] hover:text-[var(--body)]"
+            }`}
+            onClick={() => setViewMode("list")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M8 5h13" />
+              <path d="M13 12h8" />
+              <path d="M13 19h8" />
+              <path d="M3 10a2 2 0 0 0 2 2h3" />
+              <path d="M3 5v12a2 2 0 0 0 2 2h3" />
+            </svg>
+          </button>
+        </div>
       </div>
       {activeDrawerMaster ? (
         <aside

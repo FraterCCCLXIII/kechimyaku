@@ -18,6 +18,8 @@ model Master {
   overview     String?
   yearBorn     Int?           @map("year_born")
   yearDied     Int?           @map("year_died")
+  dateBorn     String?        @map("date_born")
+  dateDied     String?        @map("date_died")
   gender       String?
   location     String?
   isRoot       Boolean?       @map("is_root")
@@ -66,11 +68,52 @@ model WikiEntry {
 
 model User {
   id           Int      @id @default(autoincrement())
-  username     String   @unique
-  passwordHash String   @map("password_hash")
-  role         String   @default("admin")
+  username     String?  @unique
+  email        String?  @unique
+  passwordHash String?  @map("password_hash")
+  role         String   @default("member")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+  invitationsSent     Invitation[]         @relation("InvitedBy")
+  passwordResetTokens PasswordResetToken[]
+
   @@map("users")
+}
+
+model Invitation {
+  id          Int       @id @default(autoincrement())
+  email       String
+  role        String    @default("member")
+  tokenHash   String    @unique @map("token_hash")
+  expiresAt   DateTime  @map("expires_at")
+  invitedById Int?      @map("invited_by_id")
+  invitedBy   User?     @relation("InvitedBy", fields: [invitedById], references: [id], onDelete: SetNull)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  acceptedAt  DateTime? @map("accepted_at")
+  revokedAt   DateTime? @map("revoked_at")
+
+  @@map("invitations")
+  @@index([email])
+}
+
+model PasswordResetToken {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  usedAt    DateTime? @map("used_at")
+
+  @@map("password_reset_tokens")
+  @@index([userId])
+}
+
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
 }

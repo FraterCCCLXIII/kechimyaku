@@ -149,12 +149,11 @@ export function NavSearch() {
                       strokeLinejoin="round"
                       aria-hidden="true"
                     >
-                      <circle cx="5" cy="5" r="2" />
-                      <circle cx="19" cy="5" r="2" />
-                      <circle cx="12" cy="19" r="2" />
-                      <line x1="7" y1="5" x2="17" y2="5" />
-                      <line x1="6.5" y1="6.5" x2="10.5" y2="17" />
-                      <line x1="17.5" y1="6.5" x2="13.5" y2="17" />
+                      <rect x="16" y="16" width="6" height="6" rx="1" />
+                      <rect x="2" y="16" width="6" height="6" rx="1" />
+                      <rect x="9" y="2" width="6" height="6" rx="1" />
+                      <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" />
+                      <path d="M12 12V8" />
                     </svg>
                   </button>
                   <button

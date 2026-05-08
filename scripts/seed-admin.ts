@@ -14,20 +14,26 @@ async function run() {
   const password = process.env.ADMIN_PASSWORD ?? "change-me-now";
   const passwordHash = await hash(password, 12);
 
+  // Seed the workspace Owner. If an Owner already exists with a different
+  // username, the script becomes a no-op for the role to avoid hijacking it;
+  // it still resets the password for `username`.
+  const existingOwner = await prisma.user.findFirst({ where: { role: "owner" } });
   await prisma.user.upsert({
     where: { username },
     create: {
       username,
       passwordHash,
-      role: "admin",
+      role: existingOwner ? "admin" : "owner",
     },
     update: {
       passwordHash,
-      role: "admin",
+      role: existingOwner && existingOwner.username !== username ? "admin" : "owner",
     },
   });
 
-  console.log(`Admin user seeded: ${username}`);
+  console.log(
+    `Seeded user ${username} (${existingOwner && existingOwner.username !== username ? "admin" : "owner"}).`,
+  );
 }
 
 run()
