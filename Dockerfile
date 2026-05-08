@@ -5,12 +5,13 @@ WORKDIR /app
 ENV PORT=3000
 
 COPY package.json package-lock.json ./
-RUN apt-get update -y && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -y && apt-get install -y --no-install-recommends openssl python3 make g++ && rm -rf /var/lib/apt/lists/*
 RUN npm ci --ignore-scripts --include=dev
 
 COPY . .
 
 RUN mkdir -p /app/data
+RUN npm rebuild better-sqlite3 --build-from-source
 RUN npx prisma generate
 RUN npm run build
 RUN npm prune --omit=dev
