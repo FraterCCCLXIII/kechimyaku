@@ -3,13 +3,21 @@ import { promises as fs } from "node:fs";
 
 /**
  * Resolves the on-disk path of the SQLite database backing this app.
- * Uses `DATABASE_URL` (e.g. `file:./dev.db`) and resolves it relative to
+ * Uses `DATABASE_URL` (e.g. `file:./data/dev.db`) and resolves it relative to
  * `process.cwd()` so it matches Prisma's own resolution.
  */
 export function resolveDatabaseFilePath(): string {
-  const url = process.env.DATABASE_URL ?? "file:./dev.db";
+  const url = process.env.DATABASE_URL ?? "file:./data/dev.db";
   const raw = url.startsWith("file:") ? url.slice(5) : url;
-  return path.resolve(process.cwd(), raw);
+  if (path.isAbsolute(raw)) {
+    return raw;
+  }
+  const normalized = raw.replace(/^\.?\//, "");
+  if (normalized.startsWith("data/")) {
+    return path.join(process.cwd(), "data", normalized.slice("data/".length));
+  }
+  // Keep relative paths scoped under /data to avoid broad filesystem tracing.
+  return path.join(process.cwd(), "data", path.basename(normalized));
 }
 
 /** Returns size in bytes of the database file, or `null` if it doesn't exist. */

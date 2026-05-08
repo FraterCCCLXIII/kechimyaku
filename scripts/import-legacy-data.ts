@@ -29,12 +29,14 @@ type LegacyRelationship = {
 
 const prisma = new PrismaClient({
   adapter: new PrismaBetterSqlite3({
-    url: process.env.DATABASE_URL ?? "file:./dev.db",
+    url: process.env.DATABASE_URL ?? "file:./data/dev.db",
   }),
 });
 
 const candidateLegacyPaths = [
   process.env.LEGACY_DATABASE_PATH,
+  "/Users/paulbloch/Documents/github/Kechimyaku/Database archive/database.db",
+  "/Users/paulbloch/Documents/github/Kechimyaku/archive/kechimyaku/db/database.db",
   "/Users/paulbloch/Documents/github/Kechimyaku/kechimyaku/db/database.db",
   "/Users/paulbloch/Documents/github/Kechimyaku/database.db",
 ].filter(Boolean) as string[];
