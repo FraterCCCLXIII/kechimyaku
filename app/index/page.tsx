@@ -1,14 +1,11 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 export default async function IndexDirectoryPage() {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    redirect("/login?callbackUrl=/index");
-  }
+  const isAuthenticated = Boolean(session?.user?.id);
 
   const masters = await db.master.findMany({
     include: {
@@ -30,12 +27,14 @@ export default async function IndexDirectoryPage() {
     <div className="mx-auto w-full max-w-7xl px-4 py-6">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-medium tracking-tight">Directory</h1>
-        <Link
-          href="/index/new"
-          className="rounded bg-[var(--primary)] px-4 py-2 text-sm font-medium !text-white hover:bg-[var(--primary-active)] hover:!text-white"
-        >
-          Add Article
-        </Link>
+        {isAuthenticated ? (
+          <Link
+            href="/index/new"
+            className="rounded bg-[var(--primary)] px-4 py-2 text-sm font-medium !text-white hover:bg-[var(--primary-active)] hover:!text-white"
+          >
+            Add Article
+          </Link>
+        ) : null}
       </div>
       <div className="overflow-x-auto rounded border border-[var(--hairline)] bg-[var(--canvas)]">
         <table className="min-w-full divide-y divide-[var(--hairline)] text-sm">
@@ -50,7 +49,11 @@ export default async function IndexDirectoryPage() {
               <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">
                 Students
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Edit</th>
+              {isAuthenticated ? (
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">
+                  Edit
+                </th>
+              ) : null}
             </tr>
           </thead>
           <tbody className="divide-y divide-[var(--hairline)]">
@@ -67,11 +70,13 @@ export default async function IndexDirectoryPage() {
                 </td>
                 <td className="px-4 py-3 text-[var(--muted)]">{master.parentLinks.length}</td>
                 <td className="px-4 py-3 text-[var(--muted)]">{master.childLinks.length}</td>
-                <td className="px-4 py-3">
-                  <Link href={`/index/${master.id}/edit`} className="text-[var(--primary)] hover:underline">
-                    Edit
-                  </Link>
-                </td>
+                {isAuthenticated ? (
+                  <td className="px-4 py-3">
+                    <Link href={`/index/${master.id}/edit`} className="text-[var(--primary)] hover:underline">
+                      Edit
+                    </Link>
+                  </td>
+                ) : null}
               </tr>
             ))}
           </tbody>
